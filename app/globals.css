@@ -113,3 +113,16 @@ body::after {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--paw-orange);
 }
+
+@media (max-width: 768px) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out backwards;
+  }
+}

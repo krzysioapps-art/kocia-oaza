@@ -45,7 +45,7 @@ export default async function CatPage({
                     <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
                         
                         {/* Left: Gallery */}
-                        <div className="sticky top-24">
+                      <div className="lg:sticky lg:top-24">
                             <MediaGallery media={media || []} catName={cat.name} />
 
                             {/* Quick adoption CTA - Mobile */}

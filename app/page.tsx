@@ -33,24 +33,27 @@ function Counter({ target, start }: { target: number; start: boolean }) {
   useEffect(() => {
     if (!start) return;
 
-    let current = 0;
+    let startTime: number;
     const duration = 1200;
-    const stepTime = 16;
-    const steps = duration / stepTime;
-    const increment = target / steps;
 
-    const interval = setInterval(() => {
-      current += increment;
+    const animate = (time: number) => {
+      if (!startTime) startTime = time;
+      const progress = (time - startTime) / duration;
 
-      if (current >= target) {
+      if (progress >= 1) {
         setCount(target);
-        clearInterval(interval);
-      } else {
-        setCount(Math.floor(current));
+        return;
       }
-    }, stepTime);
 
-    return () => clearInterval(interval);
+      // 🔥 MNIEJ aktualizacji — co ~50ms zamiast co frame
+      if (Math.floor(progress * 20) !== Math.floor((count / target) * 20)) {
+        setCount(Math.floor(progress * target));
+      }
+
+      requestAnimationFrame(animate);
+    };
+
+    requestAnimationFrame(animate);
   }, [start, target]);
 
   return <>{count}</>;
@@ -100,10 +103,10 @@ export default function Home() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[var(--soft-peach)] via-[var(--muted-mauve)] to-[var(--gentle-rose)] py-16 md:py-24">
-        <div className="absolute inset-0 paw-pattern"></div>
+        <div className="absolute inset-0 paw-pattern pointer-events-none"></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-block animate-bounce mb-6">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-block mb-6 md:animate-bounce">
             <span className="material-icons" style={{ fontSize: '80px', color: 'var(--paw-orange)' }}>pets</span>
           </div>
 
@@ -119,7 +122,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/koty"
-              className="px-8 py-4 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-semibold text-lg hover:shadow-xl hover:scale-105 transition-all inline-flex items-center justify-center gap-2"
+              className="relative z-20 pointer-events-auto px-8 py-4 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-semibold text-lg hover:shadow-xl hover:scale-105 transition-all inline-flex items-center justify-center gap-2"
             >
               <span>Zobacz koty do adopcji</span>
               <span className="material-icons">arrow_forward</span>

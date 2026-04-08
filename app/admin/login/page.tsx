@@ -15,7 +15,7 @@ export default function AdminLogin() {
     setLoading(true);
 
     // Simple password check - improve later with proper auth
-    if (password === "kociaoaza2025") {
+    if (password === "kocia123") {
       localStorage.setItem("admin_authenticated", "true");
       router.push("/admin/dashboard");
     } else {

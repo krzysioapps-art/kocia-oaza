@@ -14,29 +14,29 @@ export default function CatsListPage() {
   useEffect(() => {
     const fetchCats = async () => {
       setIsLoading(true);
-      
-      const { data: catsData } = await supabase
+
+      const { data: catsData, error } = await supabase
         .from("cats")
         .select("id, name, slug, gender, tags, good_with_children, good_with_cats, status")
         .eq("status", "available")
         .is("deleted_at", null);
 
       // Fetch primary images for each cat
-      const catsWithImages = await Promise.all(
-        (catsData || []).map(async (cat) => {
-          const { data: media } = await supabase
-            .from("cat_media")
-            .select("url")
-            .eq("cat_id", cat.id)
-            .eq("is_primary", true)
-            .single();
+      const catsWithImages = [];
 
-          return {
-            ...cat,
-            image_url: media?.url || null,
-          };
-        })
-      );
+      for (const cat of catsData || []) {
+        const { data: media } = await supabase
+          .from("cat_media")
+          .select("url")
+          .eq("cat_id", cat.id)
+          .eq("is_primary", true)
+          .maybeSingle();
+
+        catsWithImages.push({
+          ...cat,
+          image_url: media?.url || null,
+        });
+      }
 
       setCats(catsWithImages);
       setIsLoading(false);
@@ -98,11 +98,10 @@ export default function CatsListPage() {
                       <button
                         key={tag}
                         onClick={() => toggleFilter(tag)}
-                        className={`px-5 py-2.5 rounded-full font-medium transition-all ${
-                          filters.includes(tag)
-                            ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white shadow-lg scale-105"
-                            : "bg-white border-2 border-[var(--warm-coral)]/30 text-[var(--deep-brown)] hover:border-[var(--warm-coral)] hover:shadow-md"
-                        }`}
+                        className={`px-5 py-2.5 rounded-full font-medium transition-all ${filters.includes(tag)
+                          ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white shadow-lg scale-105"
+                          : "bg-white border-2 border-[var(--warm-coral)]/30 text-[var(--deep-brown)] hover:border-[var(--warm-coral)] hover:shadow-md"
+                          }`}
                       >
                         {tag.charAt(0).toUpperCase() + tag.slice(1)}
                       </button>
@@ -204,7 +203,9 @@ export default function CatsListPage() {
                   href={`/koty/${cat.slug}`}
                   className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-[var(--warm-coral)]/10"
                   style={{
-                    animation: `fadeInUp 0.6s ease-out ${index * 0.1}s backwards`,
+                    animation: typeof window !== "undefined" && window.innerWidth >= 768
+                      ? `fadeInUp 0.6s ease-out ${index * 0.1}s backwards`
+                      : "none",
                   }}
                 >
                   <div className="relative overflow-hidden">

@@ -2,10 +2,20 @@
 
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdminPage = pathname?.startsWith("/admin");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+  document.body.style.overflow = menuOpen ? "hidden" : "auto";
+
+  return () => {
+    document.body.style.overflow = "auto";
+  };
+}, [menuOpen]);
 
   // For admin pages, render only children (no header/footer)
   if (isAdminPage) {
@@ -43,7 +53,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
               </div>
             </a>
 
-            {/* Navigation */}
+            {/* Desktop nav */}
             <nav className="hidden md:flex items-center gap-6">
               <a
                 href="/koty"
@@ -66,9 +76,57 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
                 O nas
               </a>
             </nav>
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-[var(--warm-coral)]/20 transition"
+            >
+              <span className="material-icons text-[var(--deep-brown)]">
+                {menuOpen ? "close" : "menu"}
+              </span>
+            </button>
           </div>
         </div>
       </header>
+
+
+      <div
+        className={`
+    fixed top-0 right-0 h-full w-full max-w-sm bg-white z-50 md:hidden shadow-2xl
+    transform transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+    ${menuOpen ? "translate-x-0" : "translate-x-full"}
+  `}
+      >
+        <button
+          onClick={() => setMenuOpen(false)}
+          className="absolute top-4 right-4 p-3 -m-2"
+        >
+          <span className="material-icons text-[var(--deep-brown)]">close</span>
+        </button>
+
+        <div className="p-6 pt-16 flex flex-col gap-6">
+          <a href="/koty" onClick={() => setMenuOpen(false)} className="text-lg font-semibold">
+            Koty do adopcji
+          </a>
+          <a href="/#proces" onClick={() => setMenuOpen(false)} className="text-lg font-semibold">
+            Jak adoptować?
+          </a>
+          <a href="/o-nas" onClick={() => setMenuOpen(false)} className="text-lg font-semibold">
+            O nas
+          </a>
+        </div>
+      </div>
+
+
+      <div
+        onClick={() => setMenuOpen(false)}
+        className={`
+    fixed inset-0 bg-black/30 z-40 md:hidden
+    transition-opacity duration-300
+    ${menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+  `}
+      />
+
 
       {/* Main content */}
       <main className="flex-1">{children}</main>

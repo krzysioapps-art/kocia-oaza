@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+import { optimizeCloudinaryUrl, getBlurDataURL } from "@/lib/cloudinary";
 
 interface Media {
   id: string;
@@ -8,6 +10,36 @@ interface Media {
   type: string;
   is_primary: boolean;
 }
+
+const HomeIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+  </svg>
+);
+
+const ChevronLeftIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+  </svg>
+);
+
+const ChevronRightIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+  </svg>
+);
+
+const PlayCircleIcon = () => (
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
+  </svg>
+);
+
+const PetsIcon = () => (
+  <svg width="96" height="96" viewBox="0 0 24 24" fill="var(--deep-brown)" className="opacity-50">
+    <path d="M4.5 9.5m0 5.5A3.5 3.5 0 1 0 4.5 8.5a3.5 3.5 0 1 0 0 7zm15 0A3.5 3.5 0 1 0 19.5 8.5a3.5 3.5 0 1 0 0 7z" />
+  </svg>
+);
 
 export default function MediaGallery({
   media,
@@ -22,15 +54,10 @@ export default function MediaGallery({
     return (
       <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
         <div className="aspect-square bg-gradient-to-br from-[var(--soft-peach)] to-[var(--gentle-rose)] flex items-center justify-center">
-          <span
-            className="material-icons opacity-50"
-            style={{ fontSize: "96px", color: "var(--deep-brown)" }}
-          >
-            pets
-          </span>
+          <PetsIcon />
         </div>
         <div className="absolute top-6 left-6 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white px-6 py-3 rounded-full font-bold text-lg shadow-xl flex items-center gap-2">
-          <span className="material-icons">home</span>
+          <HomeIcon />
           Do adopcji!
         </div>
       </div>
@@ -39,27 +66,41 @@ export default function MediaGallery({
 
   const currentMedia = media[selectedIndex];
 
+  const goToPrevious = () => {
+    setSelectedIndex((prev) => (prev === 0 ? media.length - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    setSelectedIndex((prev) => (prev === media.length - 1 ? 0 : prev + 1));
+  };
+
   return (
     <div>
       {/* Main image */}
       <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white mb-4">
         {currentMedia.type === "video" ? (
           <video
-            src={currentMedia.url}
+            src={optimizeCloudinaryUrl(currentMedia.url, { quality: 'auto' })}
             controls
             className="w-full aspect-square object-cover"
+            preload="metadata"
           />
         ) : (
-          <img
-            src={currentMedia.url}
-            alt={catName}
+          <Image
+            src={optimizeCloudinaryUrl(currentMedia.url, { width: 800, height: 800, quality: 'auto', format: 'auto' })}
+            alt={`${catName} - zdjęcie ${selectedIndex + 1}`}
+            width={800}
+            height={800}
             className="w-full aspect-square object-cover"
+            priority={selectedIndex === 0}
+            placeholder="blur"
+            blurDataURL={getBlurDataURL(currentMedia.url)}
           />
         )}
 
         {/* Floating badge */}
         <div className="absolute top-6 left-6 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white px-6 py-3 rounded-full font-bold text-lg shadow-xl flex items-center gap-2">
-          <span className="material-icons">home</span>
+          <HomeIcon />
           Do adopcji!
         </div>
 
@@ -67,20 +108,22 @@ export default function MediaGallery({
         {media.length > 1 && (
           <>
             <button
-              onClick={() =>
-                setSelectedIndex((prev) => (prev === 0 ? media.length - 1 : prev - 1))
-              }
+              onClick={goToPrevious}
               className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110"
+              aria-label="Poprzednie zdjęcie"
             >
-              <span className="material-icons text-[var(--paw-orange)]">chevron_left</span>
+              <span className="text-[var(--paw-orange)]">
+                <ChevronLeftIcon />
+              </span>
             </button>
             <button
-              onClick={() =>
-                setSelectedIndex((prev) => (prev === media.length - 1 ? 0 : prev + 1))
-              }
+              onClick={goToNext}
               className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110"
+              aria-label="Następne zdjęcie"
             >
-              <span className="material-icons text-[var(--paw-orange)]">chevron_right</span>
+              <span className="text-[var(--paw-orange)]">
+                <ChevronRightIcon />
+              </span>
             </button>
           </>
         )}
@@ -105,16 +148,22 @@ export default function MediaGallery({
                   ? "border-[var(--paw-orange)] scale-105 shadow-lg"
                   : "border-gray-200 hover:border-[var(--warm-coral)] opacity-70 hover:opacity-100"
               }`}
+              aria-label={`Przejdź do zdjęcia ${index + 1}`}
             >
               {item.type === "video" ? (
                 <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                  <span className="material-icons text-gray-400">play_circle</span>
+                  <span className="text-gray-400">
+                    <PlayCircleIcon />
+                  </span>
                 </div>
               ) : (
-                <img
-                  src={item.url}
-                  alt={`${catName} ${index + 1}`}
+                <Image
+                  src={optimizeCloudinaryUrl(item.url, { width: 150, height: 150, quality: 'auto', format: 'auto', crop: 'fill' })}
+                  alt={`${catName} miniatura ${index + 1}`}
+                  width={150}
+                  height={150}
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               )}
             </button>

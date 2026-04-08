@@ -1,49 +1,88 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { optimizeCloudinaryUrl, getBlurDataURL } from "@/lib/cloudinary";
+import {
+  SearchIcon,
+  ChildCareIcon,
+  PetsIcon,
+  ArrowForwardIcon,
+  FavoriteIcon,
+  SentimentDissatisfiedIcon,
+} from "@/components/Icons";
+
+interface Cat {
+  id: string;
+  name: string;
+  slug: string;
+  gender: string;
+  tags: string[] | null;
+  good_with_children: boolean;
+  good_with_cats: boolean;
+  status: string;
+  cat_media: { url: string }[];
+  image_url?: string | null;
+}
 
 export default function CatsListPage() {
-  const [cats, setCats] = useState<any[]>([]);
+  const [cats, setCats] = useState<Cat[]>([]);
   const [filters, setFilters] = useState<string[]>([]);
   const [goodWithChildren, setGoodWithChildren] = useState(false);
   const [goodWithCats, setGoodWithCats] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCats = async () => {
-      setIsLoading(true);
-
-      const { data: catsData, error } = await supabase
-        .from("cats")
-        .select("id, name, slug, gender, tags, good_with_children, good_with_cats, status")
-        .eq("status", "available")
-        .is("deleted_at", null);
-
-      // Fetch primary images for each cat
-      const catsWithImages = [];
-
-      for (const cat of catsData || []) {
-        const { data: media } = await supabase
-          .from("cat_media")
-          .select("url")
-          .eq("cat_id", cat.id)
-          .eq("is_primary", true)
-          .maybeSingle();
-
-        catsWithImages.push({
-          ...cat,
-          image_url: media?.url || null,
-        });
-      }
-
-      setCats(catsWithImages);
-      setIsLoading(false);
-    };
-
     fetchCats();
   }, []);
+
+  const fetchCats = async () => {
+    setIsLoading(true);
+
+    try {
+      // FIXED: Single query with join instead of N+1
+      const { data: catsData, error } = await supabase
+        .from("cats")
+        .select(`
+          id,
+          name,
+          slug,
+          gender,
+          tags,
+          good_with_children,
+          good_with_cats,
+          status,
+          cat_media!inner(url, is_primary)
+        `)
+        .eq("status", "available")
+        .eq("cat_media.is_primary", true)
+        .is("deleted_at", null);
+
+      if (error) throw error;
+
+      // Transform data to match expected structure
+      const transformedCats: Cat[] = (catsData || []).map((cat: any) => ({
+        id: cat.id,
+        name: cat.name,
+        slug: cat.slug,
+        gender: cat.gender,
+        tags: cat.tags,
+        good_with_children: cat.good_with_children,
+        good_with_cats: cat.good_with_cats,
+        status: cat.status,
+        cat_media: cat.cat_media || [],
+        image_url: cat.cat_media?.[0]?.url || null,
+      }));
+
+      setCats(transformedCats);
+    } catch (error) {
+      console.error("Error fetching cats:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const toggleFilter = (tag: string) => {
     setFilters((prev) =>
@@ -51,22 +90,25 @@ export default function CatsListPage() {
     );
   };
 
-  const filteredCats = cats?.filter((cat) => {
-    if (filters.length > 0) {
-      const hasAllTags = filters.every((f) => cat.tags?.includes(f));
-      if (!hasAllTags) return false;
-    }
-    if (goodWithChildren && !cat.good_with_children) return false;
-    if (goodWithCats && !cat.good_with_cats) return false;
-    return true;
-  });
+  // OPTIMIZED: Memoized filtering to prevent unnecessary recalculations
+  const filteredCats = useMemo(() => {
+    return cats.filter((cat) => {
+      if (filters.length > 0) {
+        const hasAllTags = filters.every((f) => cat.tags?.includes(f));
+        if (!hasAllTags) return false;
+      }
+      if (goodWithChildren && !cat.good_with_children) return false;
+      if (goodWithCats && !cat.good_with_cats) return false;
+      return true;
+    });
+  }, [cats, filters, goodWithChildren, goodWithCats]);
 
   return (
     <div className="min-h-screen">
       {/* Header */}
       <section className="bg-gradient-to-br from-[var(--soft-peach)] via-[var(--muted-mauve)] to-[var(--gentle-rose)] py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-[var(--deep-brown)] mb-4" style={{ fontFamily: "'Caveat', cursive" }}>
+          <h1 className="text-4xl md:text-6xl font-bold text-[var(--deep-brown)] mb-4 font-display">
             Koty do adopcji
           </h1>
           <p className="text-lg md:text-xl text-[var(--soft-brown)] max-w-2xl mx-auto">
@@ -78,12 +120,11 @@ export default function CatsListPage() {
       {/* Filter & Cats Section */}
       <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
           {/* Filters */}
           <div className="mb-12">
             <div className="bg-white/80 backdrop-blur rounded-3xl p-6 md:p-8 shadow-lg border border-[var(--warm-coral)]/20">
-              <h2 className="text-2xl md:text-3xl font-bold text-[var(--deep-brown)] mb-6 flex items-center gap-3" style={{ fontFamily: "'Caveat', cursive" }}>
-                <span className="material-icons text-3xl">search</span>
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--deep-brown)] mb-6 flex items-center gap-3 font-display">
+                <SearchIcon size={28} />
                 Znajdź idealnego kotka
               </h2>
 
@@ -98,10 +139,11 @@ export default function CatsListPage() {
                       <button
                         key={tag}
                         onClick={() => toggleFilter(tag)}
-                        className={`px-5 py-2.5 rounded-full font-medium transition-all ${filters.includes(tag)
-                          ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white shadow-lg scale-105"
-                          : "bg-white border-2 border-[var(--warm-coral)]/30 text-[var(--deep-brown)] hover:border-[var(--warm-coral)] hover:shadow-md"
-                          }`}
+                        className={`px-5 py-2.5 rounded-full font-medium transition-all ${
+                          filters.includes(tag)
+                            ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white shadow-lg scale-105"
+                            : "bg-white border-2 border-[var(--warm-coral)]/30 text-[var(--deep-brown)] hover:border-[var(--warm-coral)] hover:shadow-md"
+                        }`}
                       >
                         {tag.charAt(0).toUpperCase() + tag.slice(1)}
                       </button>
@@ -127,7 +169,8 @@ export default function CatsListPage() {
                         <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-6 shadow-md"></div>
                       </div>
                       <span className="font-medium text-[var(--deep-brown)] group-hover:text-[var(--paw-orange)] transition-colors flex items-center gap-1">
-                        Dla dzieci <span className="material-icons text-sm">child_care</span>
+                        Dla dzieci
+                        <ChildCareIcon />
                       </span>
                     </label>
 
@@ -143,7 +186,8 @@ export default function CatsListPage() {
                         <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-6 shadow-md"></div>
                       </div>
                       <span className="font-medium text-[var(--deep-brown)] group-hover:text-[var(--paw-orange)] transition-colors flex items-center gap-1">
-                        Z innymi kotami <span className="material-icons text-sm">pets</span>
+                        Z innymi kotami
+                        <PetsIcon />
                       </span>
                     </label>
                   </div>
@@ -187,10 +231,8 @@ export default function CatsListPage() {
             </div>
           ) : filteredCats.length === 0 ? (
             <div className="text-center py-16">
-              <span className="material-icons" style={{ fontSize: "64px", color: "var(--soft-brown)" }}>
-                sentiment_dissatisfied
-              </span>
-              <h3 className="text-2xl font-bold text-[var(--deep-brown)] mb-2 mt-4" style={{ fontFamily: "'Caveat', cursive" }}>
+              <SentimentDissatisfiedIcon size={64} />
+              <h3 className="text-2xl font-bold text-[var(--deep-brown)] mb-2 mt-4 font-display">
                 Nie znaleziono kotków
               </h3>
               <p className="text-[var(--soft-brown)]">Spróbuj zmienić kryteria wyszukiwania</p>
@@ -202,46 +244,32 @@ export default function CatsListPage() {
                   key={cat.id}
                   href={`/koty/${cat.slug}`}
                   className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-[var(--warm-coral)]/10"
-                  style={{
-                    animation: typeof window !== "undefined" && window.innerWidth >= 768
-                      ? `fadeInUp 0.6s ease-out ${index * 0.1}s backwards`
-                      : "none",
-                  }}
                 >
                   <div className="relative overflow-hidden">
                     {cat.image_url ? (
-                      <img
-                        src={cat.image_url}
+                      <Image
+                        src={optimizeCloudinaryUrl(cat.image_url, { width: 400, height: 400, quality: 'auto', format: 'auto' })}
                         alt={cat.name}
+                        width={400}
+                        height={400}
                         className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                        loading={index < 6 ? "eager" : "lazy"}
+                        placeholder="blur"
+                        blurDataURL={getBlurDataURL(cat.image_url)}
                       />
                     ) : (
                       <div className="h-64 bg-gradient-to-br from-[var(--soft-peach)] to-[var(--gentle-rose)] flex items-center justify-center">
-                        <span className="material-icons opacity-50" style={{ fontSize: "64px", color: "var(--deep-brown)" }}>
-                          pets
-                        </span>
+                        <PetsIcon size={64} />
                       </div>
                     )}
                     <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-semibold text-[var(--deep-brown)] shadow-lg flex items-center gap-1">
-                      {cat.gender === "female" ? (
-                        <>
-                          <span className="material-icons text-sm">favorite</span> Kotka
-                        </>
-                      ) : cat.gender === "male" ? (
-                        <>
-                          <span className="material-icons text-sm">favorite</span> Kocur
-                        </>
-                      ) : (
-                        <span className="material-icons text-sm">pets</span>
-                      )}
+                      <FavoriteIcon />
+                      {cat.gender === "female" ? "Kotka" : cat.gender === "male" ? "Kocur" : "Kot"}
                     </div>
                   </div>
 
                   <div className="p-5">
-                    <h3
-                      className="text-2xl font-bold text-[var(--deep-brown)] mb-2 group-hover:text-[var(--paw-orange)] transition-colors"
-                      style={{ fontFamily: "'Caveat', cursive" }}
-                    >
+                    <h3 className="text-2xl font-bold text-[var(--deep-brown)] mb-2 group-hover:text-[var(--paw-orange)] transition-colors font-display">
                       {cat.name}
                     </h3>
 
@@ -260,19 +288,12 @@ export default function CatsListPage() {
 
                     <div className="mt-4 pt-4 border-t border-[var(--warm-coral)]/20 flex items-center justify-between">
                       <div className="flex gap-2 text-sm">
-                        {cat.good_with_children && (
-                          <span className="material-icons text-sm" title="Dla dzieci">
-                            child_care
-                          </span>
-                        )}
-                        {cat.good_with_cats && (
-                          <span className="material-icons text-sm" title="Z innymi kotami">
-                            pets
-                          </span>
-                        )}
+                        {cat.good_with_children && <ChildCareIcon />}
+                        {cat.good_with_cats && <PetsIcon />}
                       </div>
                       <span className="text-[var(--paw-orange)] font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                        Zobacz więcej <span className="material-icons text-sm">arrow_forward</span>
+                        Zobacz więcej
+                        <ArrowForwardIcon />
                       </span>
                     </div>
                   </div>
@@ -282,19 +303,6 @@ export default function CatsListPage() {
           )}
         </div>
       </section>
-
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 }

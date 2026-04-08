@@ -63,10 +63,20 @@ export default function Home() {
   const { ref, isVisible } = useInView();
   const [cats, setCats] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [catsCount, setCatsCount] = useState(0);
 
   useEffect(() => {
     const fetchCats = async () => {
       setIsLoading(true);
+
+      // ✅ LICZBA WSZYSTKICH KOTÓW
+      const { count } = await supabase
+        .from("cats")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "available")
+        .is("deleted_at", null);
+
+      setCatsCount(count || 0);
 
       const { data: catsData } = await supabase
         .from("cats")
@@ -147,7 +157,7 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-8 text-center">
             <div className="group hover:scale-105 transition-transform">
               <div className="text-4xl md:text-5xl font-bold text-[var(--paw-orange)] mb-2" style={{ fontFamily: "'Caveat', cursive" }}>
-                <Counter target={cats.length || 50} start={isVisible} />+
+                <Counter target={catsCount} start={isVisible} />+
               </div>
               <div className="text-sm md:text-base text-[var(--soft-brown)]">Kotków czeka</div>
             </div>

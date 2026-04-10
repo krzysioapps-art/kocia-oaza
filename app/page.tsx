@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useRef, useState } from "react";
+import { CatRow } from "@/components/CatRow";
 
 function useInView(threshold = 0.3) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -45,7 +46,6 @@ function Counter({ target, start }: { target: number; start: boolean }) {
         return;
       }
 
-      // 🔥 MNIEJ aktualizacji — co ~50ms zamiast co frame
       if (Math.floor(progress * 20) !== Math.floor((count / target) * 20)) {
         setCount(Math.floor(progress * target));
       }
@@ -69,7 +69,6 @@ export default function Home() {
     const fetchCats = async () => {
       setIsLoading(true);
 
-      // ✅ LICZBA WSZYSTKICH KOTÓW
       const { count } = await supabase
         .from("cats")
         .select("*", { count: "exact", head: true })
@@ -80,12 +79,11 @@ export default function Home() {
 
       const { data: catsData } = await supabase
         .from("cats")
-        .select("id, name, slug, gender, tags, good_with_children, good_with_cats")
+        .select("id, name, slug, gender, tags, good_with_children, good_with_cats, fiv_status, felv_status")
         .eq("status", "available")
         .is("deleted_at", null)
-        .limit(6);
+        .order("created_at", { ascending: false });
 
-      // Fetch primary images for each cat
       const catsWithImages = await Promise.all(
         (catsData || []).map(async (cat) => {
           const { data: media } = await supabase
@@ -146,7 +144,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Decorative floating elements */}
         <div className="absolute top-20 left-10 w-20 h-20 bg-[var(--warm-coral)]/20 rounded-full blur-2xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-32 h-32 bg-[var(--paw-orange)]/20 rounded-full blur-3xl animate-pulse delay-700"></div>
       </section>
@@ -177,115 +174,62 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Cats Section */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold text-[var(--deep-brown)] mb-4" style={{ fontFamily: "'Caveat', cursive" }}>
-              Poznaj nasze kotki
-            </h2>
-            <p className="text-lg text-[var(--soft-brown)]">
-              Każdy z nich marzy o kochającym domu
-            </p>
-          </div>
-
-          {/* Cats Grid */}
+      {/* Cat Rows Section */}
+      <section className="py-16 bg-[var(--background)]">
+        <div className="page-container">
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="bg-gray-200 h-64 rounded-3xl mb-4"></div>
-                  <div className="bg-gray-200 h-6 rounded w-3/4 mb-2"></div>
-                  <div className="bg-gray-200 h-4 rounded w-1/2"></div>
-                </div>
-              ))}
+            <div className="flex items-center justify-center py-20">
+              <div className="text-center">
+                <span className="material-icons animate-spin text-4xl text-[var(--paw-orange)] mb-4">
+                  autorenew
+                </span>
+                <p className="text-[var(--soft-brown)]">Ładowanie kotków...</p>
+              </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
-              {cats.map((cat, index) => (
-                <Link
-                  key={cat.id}
-                  href={`/koty/${cat.slug}`}
-                  className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-[var(--warm-coral)]/10"
-                  style={{
-                    animation: `fadeInUp 0.6s ease-out ${index * 0.1}s backwards`,
-                  }}
-                >
-                  <div className="relative overflow-hidden">
-                    {cat.image_url ? (
-                      <img
-                        src={cat.image_url}
-                        alt={cat.name}
-                        className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="h-64 bg-gradient-to-br from-[var(--soft-peach)] to-[var(--gentle-rose)] flex items-center justify-center">
-                        <span className="material-icons opacity-50" style={{ fontSize: "64px", color: "var(--deep-brown)" }}>
-                          pets
-                        </span>
-                      </div>
-                    )}
-                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-semibold text-[var(--deep-brown)] shadow-lg flex items-center gap-1">
-                      {cat.gender === "female" ? (
-                        <>
-                          <span className="material-icons text-sm">favorite</span> Kotka
-                        </>
-                      ) : cat.gender === "male" ? (
-                        <>
-                          <span className="material-icons text-sm">favorite</span> Kocur
-                        </>
-                      ) : (
-                        <span className="material-icons text-sm">pets</span>
-                      )}
-                    </div>
-                  </div>
+            <>
+              <CatRow
+                title="💛 Szukają domu najpilniej"
+                cats={cats.filter(c => 
+                  c.fiv_status === "positive" || 
+                  c.felv_status === "positive"
+                )}
+                rowId={1}
+              />
 
-                  <div className="p-5">
-                    <h3
-                      className="text-2xl font-bold text-[var(--deep-brown)] mb-2 group-hover:text-[var(--paw-orange)] transition-colors"
-                      style={{ fontFamily: "'Caveat', cursive" }}
-                    >
-                      {cat.name}
-                    </h3>
+              <CatRow
+                title="Nowe koty"
+                cats={cats.slice(0, 15)}
+                rowId={2}
+              />
 
-                    {cat.tags && cat.tags.length > 0 && (
-                      <div className="flex gap-2 flex-wrap mt-3">
-                        {cat.tags.slice(0, 3).map((tag: string) => (
-                          <span
-                            key={tag}
-                            className="text-xs bg-gradient-to-r from-[var(--soft-peach)] to-[var(--gentle-rose)] text-[var(--deep-brown)] px-3 py-1 rounded-full font-medium"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+              <CatRow
+                title="Idealne dla rodzin"
+                cats={cats.filter(c => c.good_with_children)}
+                rowId={3}
+              />
 
-                    <div className="mt-4 pt-4 border-t border-[var(--warm-coral)]/20 flex items-center justify-between">
-                      <div className="flex gap-2 text-sm">
-                        {cat.good_with_children && (
-                          <span className="material-icons text-sm" title="Dla dzieci">
-                            child_care
-                          </span>
-                        )}
-                        {cat.good_with_cats && (
-                          <span className="material-icons text-sm" title="Z innymi kotami">
-                            pets
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-[var(--paw-orange)] font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                        Zobacz więcej <span className="material-icons text-sm">arrow_forward</span>
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+              <CatRow
+                title="Dobrze z innymi kotami"
+                cats={cats.filter(c => c.good_with_cats)}
+                rowId={4}
+              />
+
+              <CatRow
+                title="Miziasty"
+                cats={cats.filter(c => c.tags?.includes("miziasty"))}
+                rowId={5}
+              />
+
+              <CatRow
+                title="Spokojne duszki"
+                cats={cats.filter(c => c.tags?.includes("spokojny"))}
+                rowId={6}
+              />
+            </>
           )}
 
-          {/* See All Button */}
-          <div className="text-center">
+          <div className="text-center mt-12">
             <Link
               href="/koty"
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all"
@@ -366,7 +310,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Requirements */}
           <div className="bg-white/80 backdrop-blur rounded-3xl p-8 shadow-lg border border-[var(--warm-coral)]/20">
             <h3 className="text-2xl font-bold text-[var(--deep-brown)] mb-6 text-center flex items-center justify-center gap-2" style={{ fontFamily: "'Caveat', cursive" }}>
               <span className="material-icons">checklist</span>
@@ -413,19 +356,6 @@ export default function Home() {
           </Link>
         </div>
       </section>
-
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 }

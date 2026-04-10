@@ -1,0 +1,203 @@
+/* Cat Row Styles - Based on ArtBooking */
+
+.page-container {
+    max-width: 900;
+    margin: 0 auto;
+    padding: 0 2vw;
+}
+
+/* ROW */
+.row {
+    margin: 36px 0;
+}
+
+.row h2 {
+    margin: 0 0 14px 0;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--soft-brown);
+}
+
+/* WRAPPER */
+.row-wrapper {
+    position: relative;
+    margin: 0 calc(-1 * 2vw);
+    overflow: hidden;
+}
+
+/* TRACK */
+.row-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding: 24px 2vw;
+}
+
+.row-track::-webkit-scrollbar {
+    display: none;
+}
+
+/* CARD */
+.card {
+    flex: 0 0 auto;
+    aspect-ratio: 3 / 4;
+    border-radius: 16px;
+    overflow: hidden;
+    filter: drop-shadow(0 2px 8px rgba(26, 26, 46, 0.10));
+    transition: transform 0.25s ease, filter 0.25s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.card:hover {
+    transform: scale(1.04);
+    filter: drop-shadow(0 6px 16px rgba(26, 26, 46, 0.18));
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom right, var(--soft-peach), var(--gentle-rose));
+}
+
+.card-inner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.card:hover .card-inner::after {
+    opacity: 1;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.card-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-placeholder .material-icons {
+    font-size: 64px;
+    color: var(--warm-coral);
+    opacity: 0.3;
+}
+
+/* Card Info Overlay */
+.card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 70%, transparent);
+    color: white;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover .card-info {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.card-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.card-meta .material-icons {
+    font-size: 16px;
+}
+
+/* NAV BUTTONS */
+.row-btn {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 20;
+    width: 2vw;
+    min-width: 28px;
+    background: transparent;
+    border: none;
+    color: var(--paw-orange);
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.row-btn[data-visible="false"] {
+    pointer-events: none;
+}
+
+.row.row-hovered .row-btn[data-visible="true"] {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.row-btn.left:hover {
+    background: linear-gradient(to right, var(--background), transparent);
+}
+
+.row-btn.right:hover {
+    background: linear-gradient(to left, var(--background), transparent);
+}
+
+.row-btn.left {
+    left: 0;
+}
+
+.row-btn.right {
+    right: 0;
+}
+
+/* EDGE FADES */
+.fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2vw;
+    min-width: 28px;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.2s;
+}
+
+.fade.left {
+    left: 0;
+    background: linear-gradient(to right, var(--background), transparent);
+}
+
+.fade.right {
+    right: 0;
+    background: linear-gradient(to left, var(--background), transparent);
+}

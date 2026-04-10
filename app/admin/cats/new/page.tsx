@@ -22,6 +22,9 @@ export default function AddCatPage() {
         sterilized: false,
         vaccinated: false,
         dewormed: false,
+        fiv_status: "unknown",
+        felv_status: "unknown",
+        fip_status: "none",
         good_with_cats: false,
         good_with_children: false,
     });
@@ -74,6 +77,9 @@ export default function AddCatPage() {
                         sterilized: form.sterilized,
                         vaccinated: form.vaccinated,
                         dewormed: form.dewormed,
+                        fiv_status: form.fiv_status,
+                        felv_status: form.felv_status,
+                        fip_status: form.fip_status,
                         good_with_cats: form.good_with_cats,
                         good_with_children: form.good_with_children,
                     },
@@ -115,7 +121,7 @@ export default function AddCatPage() {
     };
 
     return (
-       <div className="max-w-5xl mx-auto px-4">
+        <div className="max-w-5xl mx-auto px-4">
             <form onSubmit={handleSubmit} className="space-y-8">
                 {/* Media Upload Section */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -288,8 +294,8 @@ export default function AddCatPage() {
                                 type="button"
                                 onClick={() => toggleTag(tag)}
                                 className={`px-4 py-2 rounded-full font-medium transition-all ${form.tags.includes(tag)
-                                        ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white"
-                                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                    ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white"
+                                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                     }`}
                             >
                                 {tag}
@@ -336,6 +342,71 @@ export default function AddCatPage() {
                             <span className="text-gray-700">Odrobaczenie</span>
                         </label>
                     </div>
+                </div>
+
+                {/* Viral diseases */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <span className="material-icons text-[var(--paw-orange)]">biotech</span>
+                        Choroby wirusowe
+                    </h3>
+
+                    <div className="grid md:grid-cols-3 gap-4">
+
+                        {/* FIV */}
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                FIV
+                            </label>
+                            <select
+                                value={form.fiv_status}
+                                onChange={(e) => setForm({ ...form, fiv_status: e.target.value })}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--paw-orange)] focus:border-transparent"
+                            >
+                                <option value="unknown">Brak danych</option>
+                                <option value="negative">Ujemny</option>
+                                <option value="positive">Dodatni</option>
+                            </select>
+                        </div>
+
+                        {/* FeLV */}
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                FeLV
+                            </label>
+                            <select
+                                value={form.felv_status}
+                                onChange={(e) => setForm({ ...form, felv_status: e.target.value })}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--paw-orange)] focus:border-transparent"
+                            >
+                                <option value="unknown">Brak danych</option>
+                                <option value="negative">Ujemny</option>
+                                <option value="positive">Dodatni</option>
+                            </select>
+                        </div>
+
+                        {/* FIP */}
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                FIP
+                            </label>
+                            <select
+                                value={form.fip_status}
+                                onChange={(e) => setForm({ ...form, fip_status: e.target.value })}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--paw-orange)] focus:border-transparent"
+                            >
+                                <option value="none">Brak</option>
+                                <option value="suspected">Podejrzenie</option>
+                                <option value="confirmed">Potwierdzony</option>
+                                <option value="recovered">Wyleczony</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <p className="text-xs text-gray-500 mt-4">
+                        Informacje widoczne dla użytkowników — pomagają w podjęciu decyzji adopcyjnej.
+                    </p>
                 </div>
 
                 {/* Relations */}

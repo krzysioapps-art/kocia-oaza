@@ -30,7 +30,7 @@ export default async function CatPage({
         <div className="min-h-screen">
             {/* Back button */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                <Link 
+                <Link
                     href="/"
                     className="inline-flex items-center gap-2 text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors font-medium group"
                 >
@@ -43,9 +43,9 @@ export default async function CatPage({
             <section className="relative">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
                     <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-                        
+
                         {/* Left: Gallery */}
-                      <div className="lg:sticky lg:top-24">
+                        <div className="lg:sticky lg:top-24">
                             <MediaGallery media={media || []} catName={cat.name} />
 
                             {/* Quick adoption CTA - Mobile */}
@@ -73,7 +73,7 @@ export default async function CatPage({
                                 <h1 className="text-5xl md:text-6xl font-bold text-[var(--deep-brown)] mb-4 leading-tight" style={{ fontFamily: "'Caveat', cursive" }}>
                                     {cat.name}
                                 </h1>
-                                
+
                                 <div className="flex items-center gap-3">
                                     <span className="material-icons text-3xl" style={{ color: 'var(--paw-orange)' }}>
                                         {cat.gender === "female" ? "favorite" : cat.gender === "male" ? "favorite" : "pets"}
@@ -135,7 +135,118 @@ export default async function CatPage({
                                         </span>
                                     </li>
                                 </ul>
+                                {/* Viral diseases */}
+                                <div className="mt-6 pt-6 border-t border-[var(--warm-coral)]/20">
+                                    <h4 className="text-sm font-semibold text-[var(--soft-brown)] mb-3 uppercase tracking-wide">
+                                        Choroby wirusowe
+                                    </h4>
+
+                                    <div className="flex flex-wrap gap-3">
+
+                                        {/* FIV */}
+                                        <div className="relative group">
+                                            <span
+                                                title="Wirus tylko u kotów. Nie zaraża ludzi."
+                                                className={`px-4 py-2 rounded-full text-sm font-semibold border cursor-help hover:scale-105 transition ${cat.fiv_status === 'negative'
+                                                        ? 'bg-green-100 text-green-700 border-green-200'
+                                                        : cat.fiv_status === 'positive'
+                                                            ? 'bg-orange-100 text-orange-700 border-orange-200'
+                                                            : 'bg-gray-100 text-gray-500 border-gray-200'
+                                                    }`}
+                                            >
+                                                FIV: {
+                                                    cat.fiv_status === 'negative'
+                                                        ? 'ujemny'
+                                                        : cat.fiv_status === 'positive'
+                                                            ? 'dodatni'
+                                                            : 'brak danych'
+                                                }
+                                            </span>
+
+                                            <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200 z-20">
+                                                <div className="bg-white text-[var(--deep-brown)] text-sm rounded-xl shadow-xl p-4 border border-[var(--warm-coral)]/20">
+                                                    <p className="font-semibold mb-1">FIV (koci HIV)</p>
+                                                    <p className="leading-snug text-[var(--soft-brown)]">
+                                                        Wirus występujący tylko u kotów. <strong>Nie zaraża ludzi ani innych gatunków.</strong>
+                                                        Koty z FIV mogą żyć długo i szczęśliwie w domu niewychodzącym.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* FeLV */}
+                                        <div className="relative group">
+                                            <span
+                                                title="Wirus białaczki kotów. Nie jest groźny dla ludzi."
+                                                className={`px-4 py-2 rounded-full text-sm font-semibold border cursor-help hover:scale-105 transition ${cat.felv_status === 'negative'
+                                                        ? 'bg-green-100 text-green-700 border-green-200'
+                                                        : cat.felv_status === 'positive'
+                                                            ? 'bg-orange-100 text-orange-700 border-orange-200'
+                                                            : 'bg-gray-100 text-gray-500 border-gray-200'
+                                                    }`}
+                                            >
+                                                FeLV: {
+                                                    cat.felv_status === 'negative'
+                                                        ? 'ujemny'
+                                                        : cat.felv_status === 'positive'
+                                                            ? 'dodatni'
+                                                            : 'brak danych'
+                                                }
+                                            </span>
+
+                                            <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200 z-20">
+                                                <div className="bg-white text-[var(--deep-brown)] text-sm rounded-xl shadow-xl p-4 border border-[var(--warm-coral)]/20">
+                                                    <p className="font-semibold mb-1">FeLV</p>
+                                                    <p className="leading-snug text-[var(--soft-brown)]">
+                                                        Wirus białaczki kotów. <strong>Nie jest groźny dla ludzi.</strong>
+                                                        Najlepiej, aby kot mieszkał bez innych kotów lub z kotami o tym samym statusie.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* FIP */}
+                                        <div className="relative group">
+                                            <span
+                                                title="Choroba tylko u kotów. Nie zaraża ludzi."
+                                                className={`px-4 py-2 rounded-full text-sm font-semibold border cursor-help hover:scale-105 transition ${cat.fip_status === 'none'
+                                                        ? 'bg-green-100 text-green-700 border-green-200'
+                                                        : cat.fip_status === 'recovered'
+                                                            ? 'bg-blue-100 text-blue-700 border-blue-200'
+                                                            : cat.fip_status === 'suspected' || cat.fip_status === 'confirmed'
+                                                                ? 'bg-orange-100 text-orange-700 border-orange-200'
+                                                                : 'bg-gray-100 text-gray-500 border-gray-200'
+                                                    }`}
+                                            >
+                                                FIP: {
+                                                    cat.fip_status === 'none'
+                                                        ? 'brak'
+                                                        : cat.fip_status === 'recovered'
+                                                            ? 'wyleczony'
+                                                            : cat.fip_status === 'suspected'
+                                                                ? 'podejrzenie'
+                                                                : cat.fip_status === 'confirmed'
+                                                                    ? 'potwierdzony'
+                                                                    : 'brak danych'
+                                                }
+                                            </span>
+
+                                            <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200 z-20">
+                                                <div className="bg-white text-[var(--deep-brown)] text-sm rounded-xl shadow-xl p-4 border border-[var(--warm-coral)]/20">
+                                                    <p className="font-semibold mb-1">FIP</p>
+                                                    <p className="leading-snug text-[var(--soft-brown)]">
+                                                        Choroba wirusowa występująca tylko u kotów — <strong>nie zaraża ludzi.</strong>
+                                                        Obecnie w wielu przypadkach możliwe jest skuteczne leczenie.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
+
+
 
                             {/* Compatibility */}
                             <div className="mb-8 bg-white/80 backdrop-blur rounded-3xl p-6 border border-[var(--warm-coral)]/20 shadow-lg">

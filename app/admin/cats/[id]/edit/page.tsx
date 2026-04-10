@@ -19,6 +19,9 @@ interface Cat {
     sterilized: boolean;
     vaccinated: boolean;
     dewormed: boolean;
+    fiv_status: string;
+    felv_status: string;
+    fip_status: string;
     good_with_cats: boolean;
     good_with_children: boolean;
     slug: string;
@@ -53,6 +56,9 @@ export default function EditCatPage() {
         sterilized: false,
         vaccinated: false,
         dewormed: false,
+        fiv_status: "unknown",
+        felv_status: "unknown",
+        fip_status: "none",
         good_with_cats: false,
         good_with_children: false,
     });
@@ -87,6 +93,9 @@ export default function EditCatPage() {
                 sterilized: data.sterilized,
                 vaccinated: data.vaccinated,
                 dewormed: data.dewormed,
+                fiv_status: data.fiv_status || "unknown",
+                felv_status: data.felv_status || "unknown",
+                fip_status: data.fip_status || "none",
                 good_with_cats: data.good_with_cats,
                 good_with_children: data.good_with_children,
             });
@@ -132,6 +141,9 @@ export default function EditCatPage() {
                     sterilized: form.sterilized,
                     vaccinated: form.vaccinated,
                     dewormed: form.dewormed,
+                    fiv_status: form.fiv_status,
+                    felv_status: form.felv_status,
+                    fip_status: form.fip_status,
                     good_with_cats: form.good_with_cats,
                     good_with_children: form.good_with_children,
                 })
@@ -176,33 +188,33 @@ export default function EditCatPage() {
         });
     };
 
- const handleUploadComplete = async (url: string, type: "image" | "video") => {
-  try {
-    const isPrimary = media.length === 0;
+    const handleUploadComplete = async (url: string, type: "image" | "video") => {
+        try {
+            const isPrimary = media.length === 0;
 
-    const { data, error } = await supabase
-      .from("cat_media")
-      .insert([
-        {
-          cat_id: catId,
-          url: url,
-          media_type: type,
-          is_primary: isPrimary,
-        },
-      ])
-      .select();
+            const { data, error } = await supabase
+                .from("cat_media")
+                .insert([
+                    {
+                        cat_id: catId,
+                        url: url,
+                        media_type: type,
+                        is_primary: isPrimary,
+                    },
+                ])
+                .select();
 
-    console.log("INSERT DATA:", data);
-    console.log("INSERT ERROR:", error);
+            console.log("INSERT DATA:", data);
+            console.log("INSERT ERROR:", error);
 
-    if (error) throw error;
+            if (error) throw error;
 
-    fetchMedia();
-  } catch (error) {
-    console.error("Error saving media:", error);
-    alert("Błąd podczas zapisywania media");
-  }
-};
+            fetchMedia();
+        } catch (error) {
+            console.error("Error saving media:", error);
+            alert("Błąd podczas zapisywania media");
+        }
+    };
 
     if (loading) {
         return (
@@ -380,8 +392,8 @@ export default function EditCatPage() {
                                 type="button"
                                 onClick={() => toggleTag(tag)}
                                 className={`px-4 py-2 rounded-full font-medium transition-all ${form.tags.includes(tag)
-                                        ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white"
-                                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                    ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white"
+                                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                     }`}
                             >
                                 {tag}
@@ -424,6 +436,71 @@ export default function EditCatPage() {
                             <span className="text-gray-700">Odrobaczenie</span>
                         </label>
                     </div>
+                </div>
+
+                {/* Viral diseases */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <span className="material-icons text-[var(--paw-orange)]">biotech</span>
+                        Choroby wirusowe
+                    </h3>
+
+                    <div className="grid md:grid-cols-3 gap-4">
+
+                        {/* FIV */}
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                FIV
+                            </label>
+                            <select
+                                value={form.fiv_status}
+                                onChange={(e) => setForm({ ...form, fiv_status: e.target.value })}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--paw-orange)]"
+                            >
+                                <option value="unknown">Brak danych</option>
+                                <option value="negative">Ujemny</option>
+                                <option value="positive">Dodatni</option>
+                            </select>
+                        </div>
+
+                        {/* FeLV */}
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                FeLV
+                            </label>
+                            <select
+                                value={form.felv_status}
+                                onChange={(e) => setForm({ ...form, felv_status: e.target.value })}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--paw-orange)]"
+                            >
+                                <option value="unknown">Brak danych</option>
+                                <option value="negative">Ujemny</option>
+                                <option value="positive">Dodatni</option>
+                            </select>
+                        </div>
+
+                        {/* FIP */}
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                FIP
+                            </label>
+                            <select
+                                value={form.fip_status}
+                                onChange={(e) => setForm({ ...form, fip_status: e.target.value })}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--paw-orange)]"
+                            >
+                                <option value="none">Brak</option>
+                                <option value="suspected">Podejrzenie</option>
+                                <option value="confirmed">Potwierdzony</option>
+                                <option value="recovered">Wyleczony</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <p className="text-xs text-gray-500 mt-4">
+                        Te informacje są widoczne publicznie i pomagają w adopcji.
+                    </p>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">

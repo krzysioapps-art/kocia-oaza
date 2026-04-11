@@ -77,22 +77,24 @@ export function CatRow({ title, cats, rowId }: CatRowProps) {
     // Pobierz page-container
     const row = track.closest(".row");
     if (!row) return;
-    
+
     const pageContainer = row.closest(".page-container");
     if (!pageContainer) return;
-    
+
     // Oblicz padding page-container (responsive)
     const styles = window.getComputedStyle(pageContainer);
     const paddingLeft = parseFloat(styles.paddingLeft);
     const paddingRight = parseFloat(styles.paddingRight);
-    
+
     // Szerokość contentu = clientWidth MINUS paddingi
     const contentWidth = pageContainer.clientWidth - paddingLeft - paddingRight;
     const cardWidth = (contentWidth - (count - 1) * gap) / count;
+    const cardHeight = cardWidth * (4 / 3); // Aspect ratio 3:4
 
-    track.querySelectorAll<HTMLElement>(".card").forEach((card) => {
-      card.style.width = `${cardWidth}px`;
-    });
+   track.querySelectorAll<HTMLElement>(".card").forEach((card) => {
+  card.style.width = `${cardWidth}px`;
+  card.style.height = `${cardHeight}px`;
+});
   };
 
   const getStep = (track: HTMLDivElement) => {
@@ -202,16 +204,16 @@ export function CatRow({ title, cats, rowId }: CatRowProps) {
 
 function CatCard({ cat }: { cat: Cat }) {
   return (
-    <Link href={`/koty/${cat.slug}`} className="card" data-id={cat.id}>
+    <Link href={`/${cat.slug}`} className="card" data-id={cat.id}>
       <div className="card-inner">
         {cat.image_url ? (
-          <img src={cat.image_url} alt={cat.name} loading="lazy" />
+          <img src={cat.image_url} alt={cat.name} />
         ) : (
           <div className="card-placeholder">
             <span className="material-icons">pets</span>
           </div>
         )}
-        
+
         {/* Info overlay */}
         <div className="card-info">
           <h3>{cat.name}</h3>

@@ -12,7 +12,11 @@ const nextConfig = {
     deviceSizes: [640, 768, 1024, 1280, 1920],
     imageSizes: [64, 128, 256, 384],
   },
+
   reactStrictMode: true,
+
+  // 👇 DODAJ TO
+  allowedDevOrigins: ['192.168.1.14'], // albo '192.168.1.*'
 };
 
 module.exports = nextConfig;

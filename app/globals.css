@@ -197,6 +197,7 @@ button,
 /* ROW */
 .row {
     margin: 36px 0;
+    padding: 24px 0;
 }
 
 .row h2 {
@@ -214,7 +215,11 @@ button,
     margin: 0 -5vw; /* peeki wystawają poza kontener */
     overflow: hidden;
 }
-
+@media (max-width: 640px) {
+    .row-wrapper {
+        margin: 0 -3vw; /* mniejsze peeki na mobile */
+    }
+}
 /* TRACK */
 .row-track {
     display: flex;
@@ -223,7 +228,14 @@ button,
     overflow-y: visible;
     scroll-behavior: smooth;
     scrollbar-width: none;
-    padding: 24px 5vw; /* padding dla peeków */
+    padding: 0px 5vw; /* padding dla peeków */
+}
+
+@media (max-width: 640px) {
+    .row-track {
+        padding: 24px 3vw; /* dopasuj do row-wrapper */
+        gap: 8px;
+    }
 }
 
 .row-track::-webkit-scrollbar {
@@ -236,16 +248,11 @@ button,
     aspect-ratio: 3 / 4;
     border-radius: 16px;
     overflow: hidden;
-    filter: drop-shadow(0 2px 8px rgba(26, 26, 46, 0.10));
     transition: transform 0.25s ease, filter 0.25s ease;
     cursor: pointer;
     position: relative;
 }
 
-.card:hover {
-    transform: scale(1.04);
-    filter: drop-shadow(0 6px 16px rgba(26, 26, 46, 0.18));
-}
 
 .card-inner {
     position: relative;
@@ -264,8 +271,18 @@ button,
     pointer-events: none;
 }
 
-.card:hover .card-inner::after {
-    opacity: 1;
+/* Hover overlay tylko na desktop */
+@media (hover: hover) and (pointer: fine) {
+    .card:hover .card-inner::after {
+        opacity: 1;
+    }
+}
+
+/* Na mobile zawsze lekki overlay dla czytelności tekstu */
+@media (hover: none) or (pointer: coarse) {
+    .card-inner::after {
+        opacity: 0.6;
+    }
 }
 
 .card img {
@@ -303,9 +320,20 @@ button,
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.card:hover .card-info {
-    opacity: 1;
-    transform: translateY(0);
+/* Desktop - pokazuj na hover */
+@media (hover: hover) and (pointer: fine) {
+    .card:hover .card-info {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile/Touch - zawsze widoczne */
+@media (hover: none) or (pointer: coarse) {
+    .card-info {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .card-info h3 {
@@ -336,13 +364,15 @@ button,
     border: none;
     color: var(--paw-orange);
     cursor: pointer;
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 600;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease, background 0.2s ease;
 }
-
+.row-btn:hover {
+    transform: scale(1.25);
+}
 .row-btn[data-visible="false"] {
     pointer-events: none;
 }
@@ -382,10 +412,10 @@ button,
 
 .fade.left {
     left: 0;
-    background: linear-gradient(to right, var(--background), transparent);
+    background: linear-gradient(to right, var(--background) 0%, rgba(255,248,240,0.9) 40%, transparent 100%);
 }
 
 .fade.right {
     right: 0;
-    background: linear-gradient(to left, var(--background), transparent);
+    background: linear-gradient(to left, var(--background) 0%, rgba(255,248,240,0.9) 40%, transparent 100%);
 }

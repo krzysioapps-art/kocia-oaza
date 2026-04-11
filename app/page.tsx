@@ -108,71 +108,64 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[var(--soft-peach)] via-[var(--muted-mauve)] to-[var(--gentle-rose)] py-16 md:py-24">
-        <div className="absolute inset-0 paw-pattern pointer-events-none"></div>
+    <div className="min-h-screen overflow-x-hidden">
+      {/* Hero Section z ilustracją */}
+      {/* Hero Section z ilustracją */}
+      <section className="relative overflow-hidden min-h-[80vh] flex items-center">
+        {/* Ilustracja jako tło */}
+        <div className="absolute inset-0">
+          {/* mobile */}
+          <div
+            className="absolute inset-0 bg-cover bg-bottom md:hidden"
+            style={{
+              backgroundImage: "url('/images/hero-bg-mobile.webp')",
+            }}
+          />
 
+          {/* desktop */}
+          <div
+            className="hidden md:block absolute inset-0 bg-cover bg-bottom"
+            style={{
+              backgroundImage: "url('/images/hero-bg.webp')",
+            }}
+          />
+        </div>
+
+        {/* lekki dark dla tekstu */}
+        <div className="absolute inset-0 bg-black/20" />
+
+        {/* właściwy blend do sekcji */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--background)] to-95%" />
+        {/* Paw pattern delikatnie */}
+       
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-block mb-6 md:animate-bounce">
-            <span className="material-icons" style={{ fontSize: '80px', color: 'var(--paw-orange)' }}>pets</span>
-          </div>
+          {/* Dodaj białe tło pod tekstem dla czytelności */}
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[var(--deep-brown)] mb-6 leading-tight" style={{ fontFamily: "'Caveat', cursive" }}>
+          <h1
+            className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]"
+            style={{ fontFamily: "'Caveat', cursive" }}
+          >
             Znajdź swojego<br />
             <span className="text-[var(--paw-orange)]">mruczącego przyjaciela</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-[var(--soft-brown)] max-w-2xl mx-auto mb-8 leading-relaxed">
-            Każdy z naszych kotków czeka na dom pełen miłości. Daj im szansę na szczęśliwe życie u Twojego boku.
+          <p className="text-base md:text-lg text-white/90 font-semibold max-w-2xl mx-auto mb-6 leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
+            Każdy z naszych kotków czeka na dom pełen miłości
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <Link
-              href="/koty"
-              className="relative z-20 pointer-events-auto px-8 py-4 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-semibold text-lg hover:shadow-xl hover:scale-105 transition-all inline-flex items-center justify-center gap-2"
+              href="/jak-adoptowac"
+              className="px-6 py-3 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-semibold hover:shadow-xl hover:scale-105 transition-all inline-flex items-center justify-center gap-2"
             >
-              <span>Zobacz koty do adopcji</span>
+              <span>Jak adoptować?</span>
               <span className="material-icons">arrow_forward</span>
             </Link>
-            <a
-              href="#proces"
-              className="px-8 py-4 bg-white/80 backdrop-blur text-[var(--deep-brown)] rounded-full font-semibold text-lg hover:bg-white hover:shadow-lg transition-all"
-            >
-              Jak adoptować?
-            </a>
-          </div>
-        </div>
-
-        <div className="absolute top-20 left-10 w-20 h-20 bg-[var(--warm-coral)]/20 rounded-full blur-2xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-32 h-32 bg-[var(--paw-orange)]/20 rounded-full blur-3xl animate-pulse delay-700"></div>
-      </section>
-
-      {/* Stats Section */}
-      <section ref={ref} className="py-12 bg-white/50 backdrop-blur">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-3 gap-8 text-center">
-            <div className="group hover:scale-105 transition-transform">
-              <div className="text-4xl md:text-5xl font-bold text-[var(--paw-orange)] mb-2" style={{ fontFamily: "'Caveat', cursive" }}>
-                <Counter target={catsCount} start={isVisible} />+
-              </div>
-              <div className="text-sm md:text-base text-[var(--soft-brown)]">Kotków czeka</div>
-            </div>
-            <div className="group hover:scale-105 transition-transform">
-              <div className="text-4xl md:text-5xl font-bold text-[var(--paw-orange)] mb-2" style={{ fontFamily: "'Caveat', cursive" }}>
-                <Counter target={200} start={isVisible} />+
-              </div>
-              <div className="text-sm md:text-base text-[var(--soft-brown)]">Szczęśliwych adopcji</div>
-            </div>
-            <div className="group hover:scale-105 transition-transform">
-              <div className="text-4xl md:text-5xl font-bold text-[var(--paw-orange)] mb-2" style={{ fontFamily: "'Caveat', cursive" }}>
-                <Counter target={100} start={isVisible} />%
-              </div>
-              <div className="text-sm md:text-base text-[var(--soft-brown)]">Kochane kotki</div>
-            </div>
           </div>
         </div>
       </section>
+
+
 
       {/* Cat Rows Section */}
       <section className="py-16 bg-[var(--background)]">
@@ -188,21 +181,14 @@ export default function Home() {
             </div>
           ) : (
             <>
-              <CatRow
-                title="💛 Szukają domu najpilniej"
-                cats={cats.filter(c => 
-                  c.fiv_status === "positive" || 
-                  c.felv_status === "positive"
-                )}
-                rowId={1}
-              />
 
-              <CatRow
-                title="Nowe koty"
-                cats={cats.slice(0, 15)}
-                rowId={2}
-              />
-
+              <div className="relative -mt-[14rem] mb-8 z-30">
+                <CatRow
+                  title="Nowe koty"
+                  cats={cats.slice(0, 15)}
+                  rowId={2}
+                />
+              </div>
               <CatRow
                 title="Idealne dla rodzin"
                 cats={cats.filter(c => c.good_with_children)}
@@ -228,113 +214,11 @@ export default function Home() {
               />
             </>
           )}
-
-          <div className="text-center mt-12">
-            <Link
-              href="/koty"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all"
-            >
-              <span>Zobacz wszystkie kotki</span>
-              <span className="material-icons">arrow_forward</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Adoption Process Section */}
-      <section id="proces" className="py-16 md:py-20 scroll-mt-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold text-[var(--deep-brown)] mb-4" style={{ fontFamily: "'Caveat', cursive" }}>
-              Jak wygląda adopcja krok po kroku?
-            </h2>
-            <p className="text-lg text-[var(--soft-brown)]">
-              Prosty proces, który zakończy się nową przyjaźnią
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div className="bg-gradient-to-br from-[var(--soft-peach)] to-[var(--gentle-rose)] rounded-3xl p-6 border border-[var(--warm-coral)]/20 hover:shadow-xl transition-all">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white flex items-center justify-center font-bold text-xl mb-4">
-                1
-              </div>
-              <h3 className="text-xl font-bold text-[var(--deep-brown)] mb-2" style={{ fontFamily: "'Caveat', cursive" }}>
-                Zgłoszenie
-              </h3>
-              <p className="text-[var(--soft-brown)] text-sm leading-relaxed mb-3">
-                Wyślij formularz klikając „Adoptuj" przy wybranym kocie.
-              </p>
-              <div className="bg-white/60 rounded-xl p-3 text-sm">
-                <p className="text-[var(--deep-brown)] font-semibold mb-1">Lub zadzwoń:</p>
-                <a href="tel:515621000" className="text-[var(--paw-orange)] font-bold flex items-center gap-2">
-                  <span className="material-icons text-sm">phone</span>
-                  515 621 000
-                </a>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-[var(--soft-peach)] to-[var(--gentle-rose)] rounded-3xl p-6 border border-[var(--warm-coral)]/20 hover:shadow-xl transition-all">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white flex items-center justify-center font-bold text-xl mb-4">
-                2
-              </div>
-              <h3 className="text-xl font-bold text-[var(--deep-brown)] mb-2" style={{ fontFamily: "'Caveat', cursive" }}>
-                Poznanie kota
-              </h3>
-              <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
-                Spotykasz kota w kociarni (Warszawa, Wola – Miau Café) lub w domu tymczasowym.
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-br from-[var(--soft-peach)] to-[var(--gentle-rose)] rounded-3xl p-6 border border-[var(--warm-coral)]/20 hover:shadow-xl transition-all">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white flex items-center justify-center font-bold text-xl mb-4">
-                3
-              </div>
-              <h3 className="text-xl font-bold text-[var(--deep-brown)] mb-2" style={{ fontFamily: "'Caveat', cursive" }}>
-                Decyzja i umowa
-              </h3>
-              <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
-                Podpisujemy umowę i pomagamy Ci spokojnie przyjąć kota do domu.
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-br from-[var(--soft-peach)] to-[var(--gentle-rose)] rounded-3xl p-6 border border-[var(--warm-coral)]/20 hover:shadow-xl transition-all">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white flex items-center justify-center font-bold text-xl mb-4">
-                4
-              </div>
-              <h3 className="text-xl font-bold text-[var(--deep-brown)] mb-2" style={{ fontFamily: "'Caveat', cursive" }}>
-                Po adopcji
-              </h3>
-              <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
-                Przerejestruj chip u weterynarza.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white/80 backdrop-blur rounded-3xl p-8 shadow-lg border border-[var(--warm-coral)]/20">
-            <h3 className="text-2xl font-bold text-[var(--deep-brown)] mb-6 text-center flex items-center justify-center gap-2" style={{ fontFamily: "'Caveat', cursive" }}>
-              <span className="material-icons">checklist</span>
-              Warunki adopcji
-            </h3>
-            <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-              <div className="flex items-center gap-3 bg-gradient-to-r from-[var(--soft-peach)] to-[var(--gentle-rose)] p-4 rounded-2xl">
-                <span className="material-icons text-[var(--paw-orange)]">home</span>
-                <span className="font-medium text-[var(--deep-brown)]">Dom niewychodzący</span>
-              </div>
-              <div className="flex items-center gap-3 bg-gradient-to-r from-[var(--soft-peach)] to-[var(--gentle-rose)] p-4 rounded-2xl">
-                <span className="material-icons text-[var(--paw-orange)]">window</span>
-                <span className="font-medium text-[var(--deep-brown)]">Zabezpieczone okna</span>
-              </div>
-              <div className="flex items-center gap-3 bg-gradient-to-r from-[var(--soft-peach)] to-[var(--gentle-rose)] p-4 rounded-2xl">
-                <span className="material-icons text-[var(--paw-orange)]">deck</span>
-                <span className="font-medium text-[var(--deep-brown)]">Osiatkowany balkon</span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] text-white relative overflow-hidden">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
@@ -347,13 +231,13 @@ export default function Home() {
           <p className="text-lg md:text-xl mb-8 opacity-90 leading-relaxed">
             Każdy kotek zasługuje na dom pełen miłości. Adopcja to nie tylko ratunek dla zwierzaka, ale także rozpoczęcie pięknej przyjaźni.
           </p>
-          <Link
-            href="/koty"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-white text-[var(--paw-orange)] rounded-full font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all"
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="inline-flex items-center gap-3 px-8 py-4 bg-white text-[var(--paw-orange)] rounded-full font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all cursor-pointer"
           >
-            <span className="material-icons">pets</span>
-            <span>Zobacz nasze kotki</span>
-          </Link>
+            <span className="material-icons">arrow_upward</span>
+            <span>Wróć na górę</span>
+          </button>
         </div>
       </section>
     </div>

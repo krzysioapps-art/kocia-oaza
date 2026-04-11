@@ -75,8 +75,12 @@ export default async function CatPage({
                                 </h1>
 
                                 <div className="flex items-center gap-3">
-                                    <span className="material-icons text-3xl" style={{ color: 'var(--paw-orange)' }}>
-                                        {cat.gender === "female" ? "favorite" : cat.gender === "male" ? "favorite" : "pets"}
+                                    <span className="material-icons text-[var(--paw-orange)] text-3xl">
+                                        {cat.gender === "female"
+                                            ? "female"
+                                            : cat.gender === "male"
+                                                ? "male"
+                                                : "pets"}
                                     </span>
                                     <span className="text-xl text-[var(--soft-brown)] font-medium">
                                         {cat.gender === "female" ? "Kotka" : cat.gender === "male" ? "Kocur" : "Brak danych"}
@@ -148,10 +152,10 @@ export default async function CatPage({
                                             <span
                                                 title="Wirus tylko u kotów. Nie zaraża ludzi."
                                                 className={`px-4 py-2 rounded-full text-sm font-semibold border cursor-help hover:scale-105 transition ${cat.fiv_status === 'negative'
-                                                        ? 'bg-green-100 text-green-700 border-green-200'
-                                                        : cat.fiv_status === 'positive'
-                                                            ? 'bg-orange-100 text-orange-700 border-orange-200'
-                                                            : 'bg-gray-100 text-gray-500 border-gray-200'
+                                                    ? 'bg-green-100 text-green-700 border-green-200'
+                                                    : cat.fiv_status === 'positive'
+                                                        ? 'bg-orange-100 text-orange-700 border-orange-200'
+                                                        : 'bg-gray-100 text-gray-500 border-gray-200'
                                                     }`}
                                             >
                                                 FIV: {
@@ -179,10 +183,10 @@ export default async function CatPage({
                                             <span
                                                 title="Wirus białaczki kotów. Nie jest groźny dla ludzi."
                                                 className={`px-4 py-2 rounded-full text-sm font-semibold border cursor-help hover:scale-105 transition ${cat.felv_status === 'negative'
-                                                        ? 'bg-green-100 text-green-700 border-green-200'
-                                                        : cat.felv_status === 'positive'
-                                                            ? 'bg-orange-100 text-orange-700 border-orange-200'
-                                                            : 'bg-gray-100 text-gray-500 border-gray-200'
+                                                    ? 'bg-green-100 text-green-700 border-green-200'
+                                                    : cat.felv_status === 'positive'
+                                                        ? 'bg-orange-100 text-orange-700 border-orange-200'
+                                                        : 'bg-gray-100 text-gray-500 border-gray-200'
                                                     }`}
                                             >
                                                 FeLV: {
@@ -210,12 +214,12 @@ export default async function CatPage({
                                             <span
                                                 title="Choroba tylko u kotów. Nie zaraża ludzi."
                                                 className={`px-4 py-2 rounded-full text-sm font-semibold border cursor-help hover:scale-105 transition ${cat.fip_status === 'none'
-                                                        ? 'bg-green-100 text-green-700 border-green-200'
-                                                        : cat.fip_status === 'recovered'
-                                                            ? 'bg-blue-100 text-blue-700 border-blue-200'
-                                                            : cat.fip_status === 'suspected' || cat.fip_status === 'confirmed'
-                                                                ? 'bg-orange-100 text-orange-700 border-orange-200'
-                                                                : 'bg-gray-100 text-gray-500 border-gray-200'
+                                                    ? 'bg-green-100 text-green-700 border-green-200'
+                                                    : cat.fip_status === 'recovered'
+                                                        ? 'bg-blue-100 text-blue-700 border-blue-200'
+                                                        : cat.fip_status === 'suspected' || cat.fip_status === 'confirmed'
+                                                            ? 'bg-orange-100 text-orange-700 border-orange-200'
+                                                            : 'bg-gray-100 text-gray-500 border-gray-200'
                                                     }`}
                                             >
                                                 FIP: {

@@ -62,14 +62,14 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
             {/* Desktop nav */}
             <nav className="hidden md:flex items-center gap-6">
               <Link
-                href="/koty"
+                href="/"
                 className="flex items-center h-10 leading-none text-[var(--deep-brown)] hover:text-[var(--paw-orange)] font-medium transition-colors"
               >
                 Koty do adopcji
               </Link>
 
               <Link
-                href="/#proces"
+                href="/jak-adoptowac"
                 className="flex items-center h-10 leading-none text-[var(--deep-brown)] hover:text-[var(--paw-orange)] font-medium transition-colors"
               >
                 Jak adoptować?
@@ -114,10 +114,10 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
         </button>
 
         <nav className="p-6 pt-16 flex flex-col gap-6">
-          <Link href="/koty" onClick={() => setMenuOpen(false)} className="text-lg font-semibold">
+          <Link href="/" onClick={() => setMenuOpen(false)} className="text-lg font-semibold">
             Koty do adopcji
           </Link>
-          <Link href="/#proces" onClick={() => setMenuOpen(false)} className="text-lg font-semibold">
+          <Link href="/jak-adoptowac" onClick={() => setMenuOpen(false)} className="text-lg font-semibold">
             Jak adoptować?
           </Link>
           <Link href="/o-nas" onClick={() => setMenuOpen(false)} className="text-lg font-semibold">
@@ -140,7 +140,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
       <main className="flex-1">{children}</main>
 
       {/* Footer */}
-      <footer className="mt-20 bg-gradient-to-b from-[var(--muted-mauve)] to-[var(--soft-peach)] border-t border-[var(--warm-coral)]/20">
+      <footer className="bg-gradient-to-b from-[var(--muted-mauve)] to-[var(--soft-peach)] border-t border-[var(--warm-coral)]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
@@ -157,7 +157,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link
-                    href="/koty"
+                    href="/"
                     className="text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors"
                   >
                     Koty do adopcji

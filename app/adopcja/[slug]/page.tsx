@@ -141,7 +141,7 @@ export default function AdoptionForm() {
                             <Link href="/" className="px-8 py-4 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-bold hover:shadow-xl hover:scale-105 transition-all">
                                 Wróć do listy
                             </Link>
-                            <Link href={`/koty/${slug}`} className="px-8 py-4 bg-white border-2 border-[var(--warm-coral)] text-[var(--deep-brown)] rounded-full font-bold hover:shadow-lg transition-all">
+                            <Link href={`/${slug}`} className="px-8 py-4 bg-white border-2 border-[var(--warm-coral)] text-[var(--deep-brown)] rounded-full font-bold hover:shadow-lg transition-all">
                                 Zobacz {catName}
                             </Link>
                         </div>
@@ -156,7 +156,7 @@ export default function AdoptionForm() {
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 <div className="mb-8">
-                    <Link href={`/koty/${slug}`} className="inline-flex items-center gap-2 text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors font-medium mb-6 group">
+                    <Link href={`/${slug}`} className="inline-flex items-center gap-2 text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors font-medium mb-6 group">
                         <span className="material-icons group-hover:-translate-x-1 transition-transform">arrow_back</span>
                         <span>Powrót do {catName}</span>
                     </Link>

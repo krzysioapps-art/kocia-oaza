@@ -55,8 +55,10 @@ export const metadata: Metadata = {
     images: ['/og-image.jpg'],
   },
   icons: {
-    icon: "/kocia_oaza_sygnet.svg",
-    apple: "/kocia_oaza_sygnet.svg",
+    icon: [
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
   robots: {
     index: true,
@@ -86,13 +88,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://res.cloudinary.com" />
-        
+
         {/* Material Icons - needed for existing pages */}
         <link
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet"
         />
-        
+
         {/* Structured Data */}
         <script
           type="application/ld+json"

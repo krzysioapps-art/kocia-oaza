@@ -20,37 +20,35 @@ const caveat = Caveat({
 
 export const metadata: Metadata = {
   title: {
-    default: "Kocia Oaza - Adopcje Kotów | Znajdź swojego przyjaciela",
+    default: "Stowarzyszenie Kocia Oaza Koci Raj | Znajdź swojego przyjaciela",
     template: "%s | Kocia Oaza"
   },
   description: "Adoptuj kota z Kociej Oazy. Każdy kotek zasługuje na kochający dom. Pomóż nam znaleźć im bezpieczne i szczęśliwe miejsce.",
   keywords: ["adopcja kotów", "koty do adopcji", "adopcja zwierząt", "schronisko dla kotów", "Warszawa", "Kocia Oaza"],
-  authors: [{ name: "Kocia Oaza" }],
-  creator: "Kocia Oaza",
-  publisher: "Kocia Oaza",
+  authors: [{ name: "Stowarzyszenie Kocia Oaza Koci Raj" }],
+  creator: "Stowarzyszenie Kocia Oaza Koci Raj",
+  publisher: "Stowarzyszenie Kocia Oaza Koci Raj",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kocia-oaza.pl'),
-  alternates: {
-    canonical: '/',
-  },
+  
   openGraph: {
     type: 'website',
     locale: 'pl_PL',
     url: '/',
-    siteName: 'Kocia Oaza',
-    title: 'Kocia Oaza - Adopcje Kotów',
+    siteName: 'Stowarzyszenie Kocia Oaza Koci Raj',
+    title: 'Stowarzyszenie Kocia Oaza Koci Raj',
     description: 'Adoptuj kota z Kociej Oazy. Każdy kotek zasługuje na kochający dom.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Kocia Oaza - Adopcje Kotów',
+        alt: 'Stowarzyszenie Kocia Oaza Koci Raj',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Kocia Oaza - Adopcje Kotów',
+    title: 'Stowarzyszenie Kocia Oaza Koci Raj',
     description: 'Adoptuj kota z Kociej Oazy. Każdy kotek zasługuje na kochający dom.',
     images: ['/og-image.jpg'],
   },
@@ -102,7 +100,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "AnimalShelter",
-              "name": "Kocia Oaza",
+              "name": "Stowarzyszenie Kocia Oaza Koci Raj",
               "description": "Kocia Oaza pomaga kotom znaleźć kochające domy",
               "url": process.env.NEXT_PUBLIC_SITE_URL || "https://kocia-oaza.pl",
               "logo": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://kocia-oaza.pl'}/kocia_oaza_sygnet.svg`,

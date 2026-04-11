@@ -137,7 +137,7 @@ export default function Home() {
         {/* właściwy blend do sekcji */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--background)] to-95%" />
         {/* Paw pattern delikatnie */}
-       
+
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Dodaj białe tło pod tekstem dla czytelności */}
 

@@ -51,10 +51,10 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-[var(--deep-brown)] font-display">
-                  Kocia Oaza
+                  Kocia Oaza Koci Raj
                 </h1>
                 <p className="text-xs text-[var(--soft-brown)]">
-                  Znajdź swojego przyjaciela
+                  Stowarzyszenie
                 </p>
               </div>
             </Link>
@@ -145,7 +145,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <h3 className="text-xl font-bold mb-4 text-[var(--deep-brown)] font-display">
-                Kocia Oaza
+                Stowarzyszenie Kocia Oaza Koci Raj
               </h3>
               <p className="text-sm text-[var(--soft-brown)] leading-relaxed">
                 Pomagamy kotom znaleźć kochające domy. Każdy kotek zasługuje na bezpieczne i szczęśliwe miejsce.
@@ -234,7 +234,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
           </div>
 
           <div className="mt-8 pt-8 border-t border-[var(--warm-coral)]/20 text-center text-sm text-[var(--soft-brown)]">
-            <p>© {new Date().getFullYear()} Kocia Oaza. Każdy kotek zasługuje na miłość.</p>
+            <p>© {new Date().getFullYear()} Stowarzyszenie Kocia Oaza Koci Raj. Każdy kotek zasługuje na miłość.</p>
           </div>
         </div>
       </footer>

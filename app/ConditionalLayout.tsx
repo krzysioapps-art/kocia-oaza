@@ -17,7 +17,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
   const isAdminPage = pathname?.startsWith("/admin");
   const [menuOpen, setMenuOpen] = useState(false);
   const isActive = (path: string) => pathname === path;
-const isHome = pathname === "/";
+  const isHome = pathname === "/";
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "auto";
 
@@ -36,11 +36,11 @@ const isHome = pathname === "/";
     <>
       {/* Header */}
       <header
-  className={`
+        className={`
     ${isHome ? "fixed top-0 left-0 w-full" : "sticky top-0"}
     z-[60] backdrop-blur-md bg-[var(--cream)]/80 border-b border-[var(--warm-coral)]/20
   `}
->
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -87,6 +87,17 @@ const isHome = pathname === "/";
   `}
               >
                 Jak adoptować?
+              </Link>
+
+              <Link
+                href="/porady"
+                className={`flex items-center h-10 leading-none font-medium transition-colors
+      ${isActive("/porady")
+                    ? "text-[var(--paw-orange)]"
+                    : "text-[var(--deep-brown)] hover:text-[var(--paw-orange)]"}
+    `}
+              >
+                Porady
               </Link>
 
               <Link
@@ -137,7 +148,7 @@ const isHome = pathname === "/";
   ${menuOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}
 `}
       >
-        
+
 
         <nav className="p-6 pt-16 flex flex-col gap-6">
           <Link
@@ -162,6 +173,19 @@ const isHome = pathname === "/";
           >
             Jak adoptować?
           </Link>
+
+          <Link
+      href="/porady"
+      onClick={() => setMenuOpen(false)}
+      className={`text-lg font-semibold px-3 py-2 rounded-lg transition
+        ${isActive("/porady")
+          ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
+          : "text-[var(--deep-brown)]"}
+      `}
+    >
+      Porady
+    </Link>
+
           <Link
             href="/o-nas"
             onClick={() => setMenuOpen(false)}

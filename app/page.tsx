@@ -165,6 +165,8 @@ export default function Home() {
         </div>
       </section>
 
+      
+
 
       {/* Cat Rows Section */}
       <section className="py-16 bg-[var(--background)]">

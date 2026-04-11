@@ -258,7 +258,7 @@ const isHome = pathname === "/";
               </p>
               <div className="flex gap-3 mt-4">
                 <a
-                  href="https://facebook.com/kocia-oaza"
+                  href="https://www.facebook.com/Kociooaza/"
                   className="w-10 h-10 rounded-full bg-white/50 flex items-center justify-center hover:bg-[var(--warm-coral)] hover:text-white transition-all"
                   aria-label="Facebook"
                   target="_blank"
@@ -269,7 +269,7 @@ const isHome = pathname === "/";
                   </svg>
                 </a>
                 <a
-                  href="https://instagram.com/kocia-oaza"
+                  href="https://instagram.com/kociaoaza"
                   className="w-10 h-10 rounded-full bg-white/50 flex items-center justify-center hover:bg-[var(--warm-coral)] hover:text-white transition-all"
                   aria-label="Instagram"
                   target="_blank"

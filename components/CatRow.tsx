@@ -18,15 +18,27 @@ interface CatRowProps {
   title: string;
   cats: Cat[];
   rowId: number;
+  isLoading?: boolean;
 }
 
-export function CatRow({ title, cats, rowId }: CatRowProps) {
+export function CatRow({ title, cats, rowId, isLoading }: CatRowProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLDivElement>(null);
+
+  const getSkeletonCount = () => {
+  if (typeof window === "undefined") return 6;
+  const w = window.innerWidth;
+  if (w < 600) return 3;
+  if (w < 1000) return 4;
+  return 6;
+};
+
+const SKELETON_COUNT = 6;
 
   useEffect(() => {
     const track = trackRef.current;
     const row = rowRef.current;
+    
     if (!track || !row) return;
 
     // Layout
@@ -40,7 +52,7 @@ export function CatRow({ title, cats, rowId }: CatRowProps) {
     track.addEventListener("scroll", handleScroll);
 
     // Attach snap
-    attachSnap(track);
+    let cleanupSnap = attachSnap(track);
 
     // Hover handlers
     const handleMouseEnter = () => row.classList.add("row-hovered");
@@ -49,10 +61,13 @@ export function CatRow({ title, cats, rowId }: CatRowProps) {
     row.addEventListener("mouseleave", handleMouseLeave);
 
     // Resize handler
-    const handleResize = () => {
-      layoutRow(track);
-      updateFades(track);
-    };
+   const handleResize = () => {
+  layoutRow(track);
+  updateFades(track);
+
+  cleanupSnap(); // usuń stary snap
+  cleanupSnap = attachSnap(track); // dodaj nowy
+};
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -60,8 +75,9 @@ export function CatRow({ title, cats, rowId }: CatRowProps) {
       row.removeEventListener("mouseenter", handleMouseEnter);
       row.removeEventListener("mouseleave", handleMouseLeave);
       window.removeEventListener("resize", handleResize);
+      cleanupSnap();
     };
-  }, [cats]);
+  }, [cats, isLoading]);
 
   const getCardsCount = () => {
     const w = window.innerWidth;
@@ -72,7 +88,7 @@ export function CatRow({ title, cats, rowId }: CatRowProps) {
 
   const layoutRow = (track: HTMLDivElement) => {
     const count = getCardsCount();
-    const gap = 16;
+    const gap = window.innerWidth < 640 ? 8 : 16;
 
     // Pobierz page-container
     const row = track.closest(".row");
@@ -91,10 +107,10 @@ export function CatRow({ title, cats, rowId }: CatRowProps) {
     const cardWidth = (contentWidth - (count - 1) * gap) / count;
     const cardHeight = cardWidth * (4 / 3); // Aspect ratio 3:4
 
-   track.querySelectorAll<HTMLElement>(".card").forEach((card) => {
-  card.style.width = `${cardWidth}px`;
-  card.style.height = `${cardHeight}px`;
-});
+    track.querySelectorAll<HTMLElement>(".card").forEach((card) => {
+      card.style.width = `${cardWidth}px`;
+      card.style.height = `${cardHeight}px`;
+    });
   };
 
   const getStep = (track: HTMLDivElement) => {
@@ -104,6 +120,8 @@ export function CatRow({ title, cats, rowId }: CatRowProps) {
   };
 
   const attachSnap = (track: HTMLDivElement) => {
+    if (window.innerWidth < 768) return () => { };
+
     let timeout: NodeJS.Timeout;
 
     const handleSnapScroll = () => {
@@ -123,6 +141,11 @@ export function CatRow({ title, cats, rowId }: CatRowProps) {
     };
 
     track.addEventListener("scroll", handleSnapScroll);
+
+    // 🔥 cleanup
+    return () => {
+      track.removeEventListener("scroll", handleSnapScroll);
+    };
   };
 
   const updateFades = (track: HTMLDivElement) => {
@@ -164,7 +187,7 @@ export function CatRow({ title, cats, rowId }: CatRowProps) {
     });
   };
 
-  if (!cats || cats.length === 0) return null;
+  if (!isLoading && (!cats || cats.length === 0)) return null;
 
   return (
     <div ref={rowRef} className="row">
@@ -181,9 +204,11 @@ export function CatRow({ title, cats, rowId }: CatRowProps) {
         </button>
 
         <div ref={trackRef} className="row-track" id={`row-${rowId}`}>
-          {cats.map((cat) => (
-            <CatCard key={cat.id} cat={cat} />
-          ))}
+        {isLoading
+  ? Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+      <SkeletonCard key={i} />
+    ))
+  : cats.map((cat) => <CatCard key={cat.id} cat={cat} />)}
         </div>
 
         <button
@@ -235,5 +260,15 @@ function CatCard({ cat }: { cat: Cat }) {
         </div>
       </div>
     </Link>
+  );
+}
+
+function SkeletonCard() {
+  return (
+    <div className="card">
+      <div className="card-inner skeleton">
+        <div className="skeleton-shimmer" />
+      </div>
+    </div>
   );
 }

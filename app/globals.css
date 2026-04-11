@@ -196,17 +196,30 @@ button,
 
 /* ROW */
 .row {
-    margin: 36px 0;
-    padding: 24px 0;
+    margin: 24px 0;   /* było 36px */
+    padding: 0px 0;  /* było 24px */
 }
-
+@media (min-width: 768px) {
+    .row {
+        margin: 28px 0;
+        padding: 0px 0;
+    }
+}
 .row h2 {
-    margin: 0 0 14px 0;
-    font-size: 18px; /* zwiększone z 13px */
-    font-weight: 700; /* pogrubienie z 600 */
-    letter-spacing: 0.08em; /* zmniejszone z 0.12em dla większego fontu */
+    margin: 0 0 10px 0; /* było 14px */
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--soft-brown);
+    margin-bottom: 6px;
+}
+
+@media (min-width: 768px) {
+    .row h2 {
+        font-size: 24px; /* 🔥 większe na desktop */
+        margin-bottom: 8px;
+    }
 }
 
 /* WRAPPER - wykracza poza page-container dla peeków */
@@ -218,6 +231,7 @@ button,
 @media (max-width: 640px) {
     .row-wrapper {
         margin: 0 -3vw; /* mniejsze peeki na mobile */
+        overflow: visible;
     }
 }
 /* TRACK */
@@ -233,7 +247,7 @@ button,
 
 @media (max-width: 640px) {
     .row-track {
-        padding: 24px 3vw; /* dopasuj do row-wrapper */
+        padding: 0px 3vw; /* dopasuj do row-wrapper */
         gap: 8px;
     }
 }
@@ -370,6 +384,11 @@ button,
     pointer-events: none;
     transition: opacity 0.2s ease, background 0.2s ease;
 }
+@media (max-width: 768px) {
+  .row-btn {
+    display: none !important;
+  }
+}
 .row-btn:hover {
     transform: scale(1.25);
 }
@@ -409,7 +428,11 @@ button,
     z-index: 10;
     transition: opacity 0.2s;
 }
-
+@media (max-width: 768px) {
+  .fade {
+    display: none;
+  }
+}
 .fade.left {
     left: 0;
     background: linear-gradient(to right, var(--background) 0%, rgba(255,248,240,0.9) 40%, transparent 100%);
@@ -418,4 +441,25 @@ button,
 .fade.right {
     right: 0;
     background: linear-gradient(to left, var(--background) 0%, rgba(255,248,240,0.9) 40%, transparent 100%);
+}
+
+/* Skeleton base */
+.skeleton {
+  background: linear-gradient(
+    110deg,
+    #f6eee8 25%,
+    #fbf6f2 37%,
+    #f6eee8 63%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

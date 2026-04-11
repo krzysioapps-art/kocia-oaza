@@ -111,7 +111,7 @@ export default function Home() {
     <div className="min-h-screen overflow-x-hidden">
       {/* Hero Section z ilustracją */}
       {/* Hero Section z ilustracją */}
-      <section className="relative overflow-hidden min-h-[80vh] flex items-center">
+      <section className="relative overflow-hidden min-h-[100vh] md:min-h-[100vh] flex items-center -mt-[80px] pt-[80px]">
         {/* Ilustracja jako tło */}
         <div className="absolute inset-0">
           {/* mobile */}
@@ -153,10 +153,10 @@ export default function Home() {
             Każdy z naszych kotków czeka na dom pełen miłości
           </p>
 
-          <div className="flex justify-center">
+          <div className="mt-12 text-center">
             <Link
               href="/jak-adoptowac"
-              className="px-6 py-3 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-semibold hover:shadow-xl hover:scale-105 transition-all inline-flex items-center justify-center gap-2"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all"
             >
               <span>Jak adoptować?</span>
               <span className="material-icons">arrow_forward</span>
@@ -166,54 +166,49 @@ export default function Home() {
       </section>
 
 
-
       {/* Cat Rows Section */}
       <section className="py-16 bg-[var(--background)]">
         <div className="page-container">
-          {isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="text-center">
-                <span className="material-icons animate-spin text-4xl text-[var(--paw-orange)] mb-4">
-                  autorenew
-                </span>
-                <p className="text-[var(--soft-brown)]">Ładowanie kotków...</p>
-              </div>
+
+          <>
+            <div className="relative -mt-[14rem] mb-8 z-30">
+              <CatRow
+                title="Nowe koty"
+                cats={cats.slice(0, 15)}
+                rowId={2}
+                isLoading={isLoading}
+              />
             </div>
-          ) : (
-            <>
 
-              <div className="relative -mt-[14rem] mb-8 z-30">
-                <CatRow
-                  title="Nowe koty"
-                  cats={cats.slice(0, 15)}
-                  rowId={2}
-                />
-              </div>
-              <CatRow
-                title="Idealne dla rodzin"
-                cats={cats.filter(c => c.good_with_children)}
-                rowId={3}
-              />
+            <CatRow
+              title="Idealne dla rodzin"
+              cats={cats.filter(c => c.good_with_children)}
+              rowId={3}
+              isLoading={isLoading}
+            />
 
-              <CatRow
-                title="Dobrze z innymi kotami"
-                cats={cats.filter(c => c.good_with_cats)}
-                rowId={4}
-              />
+            <CatRow
+              title="Dobrze z innymi kotami"
+              cats={cats.filter(c => c.good_with_cats)}
+              rowId={4}
+              isLoading={isLoading}
+            />
 
-              <CatRow
-                title="Miziasty"
-                cats={cats.filter(c => c.tags?.includes("miziasty"))}
-                rowId={5}
-              />
+            <CatRow
+              title="Miziasty"
+              cats={cats.filter(c => c.tags?.includes("miziasty"))}
+              rowId={5}
+              isLoading={isLoading}
+            />
 
-              <CatRow
-                title="Spokojne duszki"
-                cats={cats.filter(c => c.tags?.includes("spokojny"))}
-                rowId={6}
-              />
-            </>
-          )}
+            <CatRow
+              title="Spokojne duszki"
+              cats={cats.filter(c => c.tags?.includes("spokojny"))}
+              rowId={6}
+              isLoading={isLoading}
+            />
+          </>
+
         </div>
       </section>
 

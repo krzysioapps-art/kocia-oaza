@@ -16,7 +16,8 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
   const pathname = usePathname();
   const isAdminPage = pathname?.startsWith("/admin");
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const isActive = (path: string) => pathname === path;
+const isHome = pathname === "/";
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "auto";
 
@@ -34,7 +35,12 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
   return (
     <>
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[var(--cream)]/80 border-b border-[var(--warm-coral)]/20">
+      <header
+  className={`
+    ${isHome ? "fixed top-0 left-0 w-full" : "sticky top-0"}
+    z-[60] backdrop-blur-md bg-[var(--cream)]/80 border-b border-[var(--warm-coral)]/20
+  `}
+>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -63,33 +69,61 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
             <nav className="hidden md:flex items-center gap-6">
               <Link
                 href="/"
-                className="flex items-center h-10 leading-none text-[var(--deep-brown)] hover:text-[var(--paw-orange)] font-medium transition-colors"
+                className={`flex items-center h-10 leading-none font-medium transition-colors
+    ${isActive("/")
+                    ? "text-[var(--paw-orange)]"
+                    : "text-[var(--deep-brown)] hover:text-[var(--paw-orange)]"}
+  `}
               >
                 Koty do adopcji
               </Link>
 
               <Link
                 href="/jak-adoptowac"
-                className="flex items-center h-10 leading-none text-[var(--deep-brown)] hover:text-[var(--paw-orange)] font-medium transition-colors"
+                className={`flex items-center h-10 leading-none font-medium transition-colors
+    ${isActive("/jak-adoptowac")
+                    ? "text-[var(--paw-orange)]"
+                    : "text-[var(--deep-brown)] hover:text-[var(--paw-orange)]"}
+  `}
               >
                 Jak adoptować?
               </Link>
 
               <Link
                 href="/o-nas"
-                className="flex items-center h-10 leading-none text-[var(--deep-brown)] hover:text-[var(--paw-orange)] font-medium transition-colors"
+                className={`flex items-center h-10 leading-none font-medium transition-colors
+    ${isActive("/o-nas")
+                    ? "text-[var(--paw-orange)]"
+                    : "text-[var(--deep-brown)] hover:text-[var(--paw-orange)]"}
+  `}
               >
                 O nas
               </Link>
             </nav>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-[var(--warm-coral)]/20 transition"
+              className="md:hidden p-2 -mr-2 relative w-10 h-10 flex items-center justify-center"
               aria-label={menuOpen ? "Zamknij menu" : "Otwórz menu"}
             >
-              <span className="text-[var(--deep-brown)]">
-                {menuOpen ? <CloseIcon /> : <MenuIcon />}
-              </span>
+              <span className="sr-only">Menu</span>
+
+              <div className="relative w-6 h-6">
+                <span
+                  className={`absolute left-0 top-1/2 w-full h-[2px] bg-[var(--deep-brown)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+        ${menuOpen ? "rotate-45 translate-y-0" : "-translate-y-2"}
+      `}
+                />
+                <span
+                  className={`absolute left-0 top-1/2 w-full h-[2px] bg-[var(--deep-brown)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+        ${menuOpen ? "opacity-0" : "opacity-100"}
+      `}
+                />
+                <span
+                  className={`absolute left-0 top-1/2 w-full h-[2px] bg-[var(--deep-brown)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+        ${menuOpen ? "-rotate-45 translate-y-0" : "translate-y-2"}
+      `}
+                />
+              </div>
             </button>
           </div>
         </div>
@@ -98,29 +132,45 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
       {/* Mobile Menu */}
       <div
         className={`
-          fixed top-0 right-0 h-full w-full max-w-sm bg-white z-50 md:hidden shadow-2xl
-          transform transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
-          ${menuOpen ? "translate-x-0" : "translate-x-full"}
-        `}
+  fixed top-[80px] right-0 h-[calc(100%-80px)] w-full bg-white z-50 md:hidden shadow-2xl
+  transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+  ${menuOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}
+`}
       >
-        <button
-          onClick={() => setMenuOpen(false)}
-          className="absolute top-4 right-4 p-3 -m-2"
-          aria-label="Zamknij menu"
-        >
-          <span className="text-[var(--deep-brown)]">
-            <CloseIcon />
-          </span>
-        </button>
+        
 
         <nav className="p-6 pt-16 flex flex-col gap-6">
-          <Link href="/" onClick={() => setMenuOpen(false)} className="text-lg font-semibold">
+          <Link
+            href="/"
+            onClick={() => setMenuOpen(false)}
+            className={`text-lg font-semibold px-3 py-2 rounded-lg transition
+    ${isActive("/")
+                ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
+                : "text-[var(--deep-brown)]"}
+  `}
+          >
             Koty do adopcji
           </Link>
-          <Link href="/jak-adoptowac" onClick={() => setMenuOpen(false)} className="text-lg font-semibold">
+          <Link
+            href="/jak-adoptowac"
+            onClick={() => setMenuOpen(false)}
+            className={`text-lg font-semibold px-3 py-2 rounded-lg transition
+    ${isActive("/jak-adoptowac")
+                ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
+                : "text-[var(--deep-brown)]"}
+  `}
+          >
             Jak adoptować?
           </Link>
-          <Link href="/o-nas" onClick={() => setMenuOpen(false)} className="text-lg font-semibold">
+          <Link
+            href="/o-nas"
+            onClick={() => setMenuOpen(false)}
+            className={`text-lg font-semibold px-3 py-2 rounded-lg transition
+    ${isActive("/o-nas")
+                ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
+                : "text-[var(--deep-brown)]"}
+  `}
+          >
             O nas
           </Link>
         </nav>

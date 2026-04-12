@@ -36,6 +36,7 @@ export default function AdminLayout({
     const navItems = [
         { href: "/admin/dashboard", icon: "dashboard", label: "Dashboard" },
         { href: "/admin/cats", icon: "pets", label: "Koty" },
+        { href: "/admin/groups", icon: "group_work", label: "Grupy" }, // 👈 NOWE
         { href: "/admin/forms", icon: "description", label: "Zgłoszenia" },
     ];
 
@@ -76,8 +77,8 @@ export default function AdminLayout({
                                 key={item.href}
                                 href={item.href}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive
-                                        ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white shadow-md"
-                                        : "text-gray-700 hover:bg-gray-100"
+                                    ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white shadow-md"
+                                    : "text-gray-700 hover:bg-gray-100"
                                     }`}
                             >
                                 <span className="material-icons">{item.icon}</span>
@@ -120,6 +121,11 @@ export default function AdminLayout({
                                 {pathname === "/admin/cats" && "Lista kotów"}
                                 {pathname === "/admin/cats/new" && "Dodaj nowego kota"}
                                 {pathname.includes("/admin/cats/") && pathname.includes("/edit") && "Edytuj kota"}
+
+                                {pathname === "/admin/groups" && "Grupy adopcyjne"}
+                                {pathname === "/admin/groups/new" && "Nowa grupa"}
+                                {pathname.includes("/admin/groups/") && pathname.includes("/edit") && "Edytuj grupę"}
+
                                 {pathname === "/admin/forms" && "Zgłoszenia adopcyjne"}
                                 {pathname.includes("/admin/forms/") && !pathname.includes("/admin/forms") && "Szczegóły zgłoszenia"}
                             </h2>

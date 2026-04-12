@@ -6,6 +6,16 @@ import { Suspense } from "react";
 import { CatMediaSection } from "@/components/CatMediaSection";
 import { ViralBadge } from "@/components/ViralBadge";
 
+type CatWithMedia = {
+    id: string;
+    name: string;
+    slug: string;
+    cat_media: {
+        url: string;
+        is_primary: boolean;
+    }[];
+};
+
 export default async function CatPage({
     params,
 }: {
@@ -20,6 +30,129 @@ export default async function CatPage({
         .maybeSingle();
 
     if (!cat) return notFound();
+
+    // 🔥 GROUP LOGIC
+    const { data: groupMember } = await supabase
+        .from("cat_group_members")
+        .select("group_id")
+        .eq("cat_id", cat.id)
+        .maybeSingle();
+
+    let group: any = null;
+    let groupCats: CatWithMedia[] = [];
+
+
+    if (groupMember?.group_id) {
+        // pobierz grupę
+        const { data: groupData } = await supabase
+            .from("cat_groups")
+            .select("*")
+            .eq("id", groupMember.group_id)
+            .single();
+
+        group = groupData;
+
+        // pobierz członków grupy
+        const { data: members } = await supabase
+            .from("cat_group_members")
+            .select("cat_id")
+            .eq("group_id", groupMember.group_id);
+
+        const ids = (members || []).map((m) => m.cat_id);
+
+        let cats: CatWithMedia[] = [];
+
+        if (ids.length > 0) {
+            const { data } = await supabase
+                .from("cats")
+                .select(`
+            id,
+            name,
+            slug,
+            cat_media(url, is_primary)
+        `)
+                .in("id", ids);
+
+            cats = data || [];
+        }
+
+        groupCats = cats.filter((c) => c.id !== cat.id);
+    }
+
+    function getAge(birthDate: string | null) {
+        if (!birthDate) return "Brak danych";
+
+        const birth = new Date(birthDate);
+        const now = new Date();
+
+        let years = now.getFullYear() - birth.getFullYear();
+        let months = now.getMonth() - birth.getMonth();
+
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+
+        // < 1 rok
+        if (years === 0) {
+            return months <= 1 ? "1 miesiąc" : `${months} miesięcy`;
+        }
+
+        // >= 1 rok
+        if (months === 0) {
+            if (years === 1) return "1 rok";
+            if (years < 5) return `${years} lata`;
+            return `${years} lat`;
+        }
+
+        return `${years} ${years === 1 ? "rok" : years < 5 ? "lata" : "lat"} ${months} mies.`;
+    }
+
+    function getStatusLabel(status: string, gender: string | null) {
+        const isFemale = gender === "female";
+
+        switch (status) {
+            case "available":
+                return isFemale ? "Dostępna" : "Dostępny";
+            case "reserved":
+                return isFemale ? "Zarezerwowana" : "Zarezerwowany";
+            case "adopted":
+                return isFemale ? "Adoptowana" : "Adoptowany";
+            default:
+                return "Brak danych";
+        }
+    }
+
+    function getCompatibilityData(
+        type: "children" | "cats",
+        value: boolean | null
+    ) {
+        if (value === true) {
+            return {
+                label: type === "children"
+                    ? "Dla rodzin z dziećmi"
+                    : "Może mieszkać z innymi kotami",
+                color: "text-green-600",
+                icon: "check_circle",
+            };
+        }
+
+        if (value === false) {
+            return {
+                label: type === "children"
+                    ? "Nie dla dzieci"
+                    : "Najlepiej jako jedynak",
+                color: "text-red-500",
+                icon: "block",
+            };
+        }
+
+        return {
+            label: "Brak danych",
+            color: "text-gray-400",
+            icon: "help",
+        };
+    }
 
     return (
         <div className="min-h-screen">
@@ -75,6 +208,12 @@ export default async function CatPage({
                                     {cat.name}
                                 </h1>
 
+                                {group && (
+                                    <div className="mt-4 inline-block bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-semibold">
+                                        🐾 Adopcja w parze
+                                    </div>
+                                )}
+
                                 <div className="flex items-center gap-3">
                                     <span className="material-icons text-[var(--paw-orange)] text-3xl">
                                         {cat.gender === "female"
@@ -86,6 +225,57 @@ export default async function CatPage({
                                     <span className="text-xl text-[var(--soft-brown)] font-medium">
                                         {cat.gender === "female" ? "Kotka" : cat.gender === "male" ? "Kocur" : "Brak danych"}
                                     </span>
+                                </div>
+                            </div>
+
+                            <div className="mb-8 bg-white/80 backdrop-blur rounded-3xl p-6 border border-[var(--warm-coral)]/20 shadow-lg">
+                                <h3 className="text-2xl font-bold text-[var(--deep-brown)] mb-4 flex items-center gap-2" style={{ fontFamily: "'Caveat', cursive" }}>
+                                    <span className="material-icons">info</span>
+                                    Podstawowe informacje
+                                </h3>
+
+                                <div className="grid grid-cols-2 gap-4 text-[var(--deep-brown)]">
+
+                                    {/* Status */}
+                                    <div>
+                                        <span className="text-sm text-[var(--soft-brown)]">Status</span>
+                                        <p className="font-semibold">
+                                            {getStatusLabel(cat.status, cat.gender)}
+                                        </p>
+                                    </div>
+
+                                    {/* Lokalizacja */}
+                                    <div>
+                                        <span className="text-sm text-[var(--soft-brown)]">Lokalizacja</span>
+                                        <p className="font-semibold">
+                                            {cat.location === "kociarnia"
+                                                ? "Kociarnia"
+                                                : cat.location === "dt"
+                                                    ? "Dom tymczasowy"
+                                                    : cat.location === "ds"
+                                                        ? "Dom stały"
+                                                        : cat.location === "cafe"
+                                                            ? "Kocia kawiarnia"
+                                                            : "Brak danych"}
+                                        </p>
+                                    </div>
+
+                                    {/* Wiek */}
+                                    <div>
+                                        <span className="text-sm text-[var(--soft-brown)]">Wiek</span>
+                                        <p className="font-semibold">
+                                            {getAge(cat.birth_date)}
+                                        </p>
+                                    </div>
+
+                                    {/* Waga */}
+                                    <div>
+                                        <span className="text-sm text-[var(--soft-brown)]">Waga</span>
+                                        <p className="font-semibold">
+                                            {cat.weight ? `${cat.weight} kg` : "Brak danych"}
+                                        </p>
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -249,22 +439,35 @@ export default async function CatPage({
                                     Idealne dla
                                 </h3>
                                 <div className="space-y-3">
-                                    <div className="flex items-center gap-3">
-                                        <span className={`material-icons text-2xl ${cat.good_with_children ? 'text-[var(--paw-orange)]' : 'text-gray-300'}`}>
-                                            child_care
-                                        </span>
-                                        <span className={`font-medium ${cat.good_with_children ? 'text-[var(--deep-brown)]' : 'text-gray-400'}`}>
-                                            Rodziny z dziećmi
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className={`material-icons text-2xl ${cat.good_with_cats ? 'text-[var(--paw-orange)]' : 'text-gray-300'}`}>
-                                            pets
-                                        </span>
-                                        <span className={`font-medium ${cat.good_with_cats ? 'text-[var(--deep-brown)]' : 'text-gray-400'}`}>
-                                            Domy z innymi kotami
-                                        </span>
-                                    </div>
+
+                                    {(() => {
+                                        const data = getCompatibilityData("children", cat.good_with_children);
+                                        return (
+                                            <div className="flex items-center gap-3">
+                                                <span className={`material-icons text-2xl ${data.color}`}>
+                                                    {data.icon}
+                                                </span>
+                                                <span className={`font-medium ${data.color}`}>
+                                                    {data.label}
+                                                </span>
+                                            </div>
+                                        );
+                                    })()}
+
+                                    {(() => {
+                                        const data = getCompatibilityData("cats", cat.good_with_cats);
+                                        return (
+                                            <div className="flex items-center gap-3">
+                                                <span className={`material-icons text-2xl ${data.color}`}>
+                                                    {data.icon}
+                                                </span>
+                                                <span className={`font-medium ${data.color}`}>
+                                                    {data.label}
+                                                </span>
+                                            </div>
+                                        );
+                                    })()}
+
                                 </div>
                             </div>
 
@@ -278,6 +481,55 @@ export default async function CatPage({
                                     {cat.description || "Ta słodka duszka czeka na poznanie Ciebie i Twojej rodziny. Skontaktuj się z nami, aby dowiedzieć się więcej!"}
                                 </div>
                             </div>
+
+                            {/* ===== ADOPTION GROUP ===== */}
+                            {group && groupCats.length > 0 && (
+                                <div className="mb-8 bg-orange-50 border border-orange-200 rounded-3xl p-6 shadow-lg">
+                                    <h3
+                                        className="text-2xl font-bold text-[var(--deep-brown)] mb-3 flex items-center gap-2"
+                                        style={{ fontFamily: "'Caveat', cursive" }}
+                                    >
+                                        <span className="material-icons">pets</span>
+                                        Adopcja razem
+                                    </h3>
+
+                                    <p className="text-[var(--soft-brown)] mb-4 leading-relaxed">
+                                        {group.adoption_type === "required"
+                                            ? "Ten kot MUSI być adoptowany razem z:"
+                                            : "Ten kot najlepiej odnajdzie się razem z:"}
+                                    </p>
+
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                        {groupCats.map((c) => {
+                                         const img = c.cat_media?.find((m) => m.is_primary);
+
+                                            return (
+                                                <Link
+                                                    key={c.id}
+                                                    href={`/${c.slug}`}
+                                                    className="bg-white border border-[var(--warm-coral)]/20 rounded-xl overflow-hidden hover:shadow-lg transition-all hover:scale-[1.02]"
+                                                >
+                                                    {img && (
+                                                        <img
+                                                            src={img.url}
+                                                            className="w-full h-32 object-cover"
+                                                        />
+                                                    )}
+
+                                                    <div className="p-3">
+                                                        <p className="font-bold text-[var(--deep-brown)] text-lg">
+                                                            {c.name}
+                                                        </p>
+                                                        <p className="text-sm text-[var(--soft-brown)] mt-1">
+                                                            Zobacz profil →
+                                                        </p>
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Desktop CTA */}
                             <div className="hidden lg:block sticky bottom-6">

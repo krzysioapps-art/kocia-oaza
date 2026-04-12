@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -10,6 +10,16 @@ export default function AddCatPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [uploadedMedia, setUploadedMedia] = useState<Array<{ url: string; type: "image" | "video" }>>([]);
+    const [groups, setGroups] = useState<any[]>([]);
+    const CAT_LOCATIONS = ["kociarnia", "dt", "cafe", "ds"] as const;
+
+    const CAT_LOCATION_LABELS: Record<(typeof CAT_LOCATIONS)[number], string> = {
+        kociarnia: "Kociarnia",
+        dt: "Dom tymczasowy",
+        cafe: "Kocia kawiarnia",
+        ds: "Dom stały",
+    };
+
     const [form, setForm] = useState({
         name: "",
         gender: "",
@@ -25,11 +35,40 @@ export default function AddCatPage() {
         fiv_status: "unknown",
         felv_status: "unknown",
         fip_status: "none",
-        good_with_cats: false,
-        good_with_children: false,
+        good_with_cats: null as boolean | null,
+        good_with_children: null as boolean | null,
+        group_id: null as string | null,
     });
 
-    const availableTags = ["spokojny", "aktywny", "miziasty", "jedynak", "towarzyski", "nieśmiały"];
+    useEffect(() => {
+        fetchGroups();
+    }, []);
+
+    const fetchGroups = async () => {
+        const { data, error } = await supabase
+            .from("cat_groups")
+            .select("*");
+
+        if (error) {
+            console.error("Error fetching groups:", error);
+            return;
+        }
+
+        setGroups(data || []);
+    };
+
+    const availableTags = [
+        "spokojny",
+        "aktywny",
+        "towarzyski",
+        "miziasty",
+        "niezależny",
+        "jedynak",
+        "potrzebuje czasu",
+        "wrażliwy",
+        "łatwy",
+        "nieśmiały"
+    ];
 
     const handleUploadComplete = (url: string, type: "image" | "video") => {
         setUploadedMedia((prev) => [...prev, { url, type }]);
@@ -88,6 +127,18 @@ export default function AddCatPage() {
                 .single();
 
             if (error) throw error;
+
+            // 🔥 zapis grupy
+            if (form.group_id) {
+                const { error: groupError } = await supabase
+                    .from("cat_group_members")
+                    .insert({
+                        cat_id: data.id,
+                        group_id: form.group_id,
+                    });
+
+                if (groupError) throw groupError;
+            }
 
             // Save uploaded media
             if (uploadedMedia.length > 0) {
@@ -239,13 +290,21 @@ export default function AddCatPage() {
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
                                 Lokalizacja
                             </label>
-                            <input
-                                type="text"
+                            <select
                                 value={form.location}
-                                onChange={(e) => setForm({ ...form, location: e.target.value })}
+                                onChange={(e) =>
+                                    setForm({ ...form, location: e.target.value })
+                                }
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--paw-orange)] focus:border-transparent"
-                                placeholder="np. Warszawa, Wola"
-                            />
+                            >
+                                <option value="">Brak / nieznana</option>
+
+                                {CAT_LOCATIONS.map((loc) => (
+                                    <option key={loc} value={loc}>
+                                        {CAT_LOCATION_LABELS[loc]}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div>
@@ -417,25 +476,96 @@ export default function AddCatPage() {
                     </h3>
 
                     <div className="space-y-3">
-                        <label className="flex items-center gap-3 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={form.good_with_cats}
-                                onChange={(e) => setForm({ ...form, good_with_cats: e.target.checked })}
-                                className="w-5 h-5 text-[var(--paw-orange)] rounded focus:ring-[var(--paw-orange)]"
-                            />
-                            <span className="text-gray-700">Dobrze z innymi kotami</span>
-                        </label>
+                        <div>
+                            <label className="block text-sm font-semibold mb-2">
+                                Relacja z innymi kotami
+                            </label>
 
-                        <label className="flex items-center gap-3 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={form.good_with_children}
-                                onChange={(e) => setForm({ ...form, good_with_children: e.target.checked })}
-                                className="w-5 h-5 text-[var(--paw-orange)] rounded focus:ring-[var(--paw-orange)]"
-                            />
-                            <span className="text-gray-700">Dobrze z dziećmi</span>
-                        </label>
+                            <select
+                                value={
+                                    form.good_with_cats === null
+                                        ? "unknown"
+                                        : form.good_with_cats
+                                            ? "yes"
+                                            : "no"
+                                }
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        good_with_cats:
+                                            e.target.value === "unknown"
+                                                ? null
+                                                : e.target.value === "yes",
+                                    })
+                                }
+                                className="w-full px-4 py-2 border rounded-lg"
+                            >
+                                <option value="unknown">Brak danych</option>
+                                <option value="yes">Dobrze z innymi kotami</option>
+                                <option value="no">Najlepiej jako jedynak</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold mb-2">
+                                Relacja z dziećmi
+                            </label>
+
+                            <select
+                                value={
+                                    form.good_with_children === null
+                                        ? "unknown"
+                                        : form.good_with_children
+                                            ? "yes"
+                                            : "no"
+                                }
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        good_with_children:
+                                            e.target.value === "unknown"
+                                                ? null
+                                                : e.target.value === "yes",
+                                    })
+                                }
+                                className="w-full px-4 py-2 border rounded-lg"
+                            >
+                                <option value="unknown">Brak danych</option>
+                                <option value="yes">Dla rodzin z dziećmi</option>
+                                <option value="no">Nie dla dzieci</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold mb-2">
+                                Grupa adopcyjna
+                            </label>
+
+                            <select
+                                value={form.group_id || ""}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        group_id: e.target.value || null,
+                                    })
+                                }
+                                className="w-full px-4 py-2 border rounded-lg"
+                            >
+                                <option value="">Brak</option>
+
+                                {groups.map((g) => (
+                                    <option key={g.id} value={g.id}>
+                                        {g.name} ({g.adoption_type === "required" ? "razem" : "preferowane"})
+                                    </option>
+                                ))}
+                            </select>
+
+                            {form.group_id && (
+                                <div className="mt-3 p-3 bg-orange-50 border border-orange-200 rounded-lg text-sm text-orange-800">
+                                    🐾 Ten kot będzie częścią grupy adopcyjnej
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 

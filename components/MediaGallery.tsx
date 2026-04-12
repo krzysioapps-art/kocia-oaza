@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { optimizeCloudinaryUrl, getBlurDataURL } from "@/lib/cloudinary";
+import { useState, useRef, useEffect } from "react";
+
 
 interface Media {
   id: string;
   url: string;
-  type: string;
+  media_type: "image" | "video";
   is_primary: boolean;
 }
 
@@ -50,6 +51,8 @@ export default function MediaGallery({
 }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
   if (!media || media.length === 0) {
     return (
       <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
@@ -74,16 +77,27 @@ export default function MediaGallery({
     setSelectedIndex((prev) => (prev === media.length - 1 ? 0 : prev + 1));
   };
 
+  useEffect(() => {
+    if (currentMedia.media_type !== "video") {
+      videoRef.current?.pause();
+    }
+  }, [selectedIndex]);
+
   return (
     <div>
       {/* Main image */}
-      <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white mb-4">
-        {currentMedia.type === "video" ? (
+      <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white mb-4 bg-black flex items-center justify-center min-h-[300px] max-h-[80vh]">
+        {currentMedia.media_type === "video" ? (
           <video
+            ref={videoRef}
+            key={currentMedia.url}
             src={optimizeCloudinaryUrl(currentMedia.url, { quality: 'auto' })}
             controls
-            className="w-full aspect-square object-cover"
+            autoPlay
+            muted
+            playsInline
             preload="metadata"
+            className="max-h-[80vh] max-w-full object-contain"
           />
         ) : (
           <Image
@@ -91,7 +105,7 @@ export default function MediaGallery({
             alt={`${catName} - zdjęcie ${selectedIndex + 1}`}
             width={800}
             height={800}
-            className="w-full aspect-square object-cover"
+            className="max-h-[80vh] max-w-full object-contain"
             priority={selectedIndex === 0}
             placeholder="blur"
             blurDataURL={getBlurDataURL(currentMedia.url)}
@@ -142,19 +156,27 @@ export default function MediaGallery({
           {media.map((item, index) => (
             <button
               key={item.id}
-              onClick={() => setSelectedIndex(index)}
-              className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                index === selectedIndex
-                  ? "border-[var(--paw-orange)] scale-105 shadow-lg"
-                  : "border-gray-200 hover:border-[var(--warm-coral)] opacity-70 hover:opacity-100"
-              }`}
+              onClick={() => { setSelectedIndex(index); }}
+              className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${index === selectedIndex
+                ? "border-[var(--paw-orange)] scale-105 shadow-lg"
+                : "border-gray-200 hover:border-[var(--warm-coral)] opacity-70 hover:opacity-100"
+                }`}
               aria-label={`Przejdź do zdjęcia ${index + 1}`}
             >
-              {item.type === "video" ? (
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-400">
-                    <PlayCircleIcon />
-                  </span>
+              {item.media_type === "video" ? (
+                <div className="relative w-full h-full">
+                  <video
+                    src={optimizeCloudinaryUrl(item.url, { quality: "auto", width: 200 })}
+                    muted
+                    preload="metadata"
+                    className="w-full h-full object-cover"
+                  />
+
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-white">
+                      <PlayCircleIcon />
+                    </span>
+                  </div>
                 </div>
               ) : (
                 <Image

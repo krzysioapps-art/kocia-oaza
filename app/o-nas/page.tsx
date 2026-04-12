@@ -29,12 +29,99 @@ export default function AboutPage() {
             </div>
 
             <p className="text-[var(--deep-brown)] leading-relaxed text-lg mb-6">
-              <strong>Kocia Oaza</strong> to inicjatywa tworzona z miłości do zwierząt. Pomagamy kotom znaleźć bezpieczne i kochające domy, wspieramy adopcje oraz dzielimy się informacjami o ich potrzebach.
+              <strong>Kocia Oaza</strong> to inicjatywa tworzona z miłości do zwierząt. Ratujemy koty przed bezdomnością i pomagamy im znaleźć bezpieczne, kochające domy.
             </p>
 
             <p className="text-[var(--deep-brown)] leading-relaxed text-lg">
               Naszym celem jest łączenie ludzi z kotami, które czekają na swoją szansę. Każde zwierzę zasługuje na opiekę, spokój i odpowiedzialnego opiekuna.
             </p>
+          </div>
+
+          <div className="bg-white/80 backdrop-blur rounded-3xl p-8 md:p-12 shadow-xl border border-[var(--warm-coral)]/20 mb-12">
+            <h2
+              className="text-3xl font-bold text-[var(--deep-brown)] mb-6"
+              style={{ fontFamily: "'Caveat', cursive" }}
+            >
+              Nasza misja
+            </h2>
+
+            <p className="text-[var(--deep-brown)] text-lg leading-relaxed mb-6">
+              Kotom pomagamy już od kilku lat, a jako stowarzyszenie działamy od 2022 roku.
+              Mamy za sobą dziesiątki udanych adopcji oraz setki wykonanych kastracji i sterylizacji.
+            </p>
+
+            <p className="text-[var(--deep-brown)] text-lg leading-relaxed mb-6">
+              Naszym celem jest <strong>ograniczanie bezdomności kotów</strong> oraz poprawa ich dobrobytu.
+              Największy nacisk kładziemy na kastrację — to najskuteczniejszy sposób walki z bezdomnością.
+            </p>
+
+            <p className="text-[var(--deep-brown)] text-lg leading-relaxed mb-6">
+              Ratujemy koty chore, porzucone i zapomniane. Trafiają do nas zwierzęta,
+              które często nie mają już żadnych szans — a my staramy się je im przywrócić.
+            </p>
+
+            <p className="text-[var(--deep-brown)] text-lg leading-relaxed mb-6">
+              Opiekujemy się również kotami wolnożyjącymi — dokarmiamy je,
+              leczymy i kastrujemy. Obecnie mamy pod opieką kilka stad kotów,
+              które regularnie wspieramy.
+            </p>
+
+            <p className="text-[var(--deep-brown)] text-lg leading-relaxed">
+              Działamy jako niewielkie stowarzyszenie, ale wierzymy,
+              że z czasem nasz zasięg i możliwości będą coraz większe.
+            </p>
+          </div>
+
+
+
+
+          <div className="mb-12">
+            <h2
+              className="text-3xl font-bold text-[var(--deep-brown)] mb-8 text-center"
+              style={{ fontFamily: "'Caveat', cursive" }}
+            >
+              Jak pomagamy?
+            </h2>
+
+            <div className="grid md:grid-cols-3 gap-6">
+
+              <div className="bg-white/80 backdrop-blur rounded-2xl p-6 border border-[var(--warm-coral)]/20 shadow-lg text-center">
+                <span className="material-icons text-4xl text-[var(--paw-orange)] mb-3">
+                  public
+                </span>
+                <h3 className="font-bold text-[var(--deep-brown)] mb-2">
+                  Walczymy z bezdomnością
+                </h3>
+                <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
+                  Działamy, aby ograniczyć liczbę bezdomnych kotów i poprawić ich warunki życia
+                </p>
+              </div>
+
+              <div className="bg-white/80 backdrop-blur rounded-2xl p-6 border border-[var(--warm-coral)]/20 shadow-lg text-center">
+                <span className="material-icons text-4xl text-[var(--paw-orange)] mb-3">
+                  content_cut
+                </span>
+                <h3 className="font-bold text-[var(--deep-brown)] mb-2">
+                  Kastrujemy koty wolnożyjące
+                </h3>
+                <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
+                  Wspieramy kontrolę populacji poprzez kastrację i opiekę nad kotami wolno żyjącymi
+                </p>
+              </div>
+
+              <div className="bg-white/80 backdrop-blur rounded-2xl p-6 border border-[var(--warm-coral)]/20 shadow-lg text-center">
+                <span className="material-icons text-4xl text-[var(--paw-orange)] mb-3">
+                  medical_services
+                </span>
+                <h3 className="font-bold text-[var(--deep-brown)] mb-2">
+                  Pomagamy w sterylizacji
+                </h3>
+                <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
+                  Pomagamy opiekunom w organizacji i finansowaniu zabiegów sterylizacji
+                </p>
+              </div>
+
+            </div>
           </div>
 
           {/* What we do */}

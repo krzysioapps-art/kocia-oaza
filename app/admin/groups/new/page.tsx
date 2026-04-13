@@ -44,17 +44,24 @@ export default function AddGroupPage() {
     };
 
     return (
-        <div className="max-w-2xl mx-auto px-4">
+        <div className="max-w-3xl mx-auto px-4 mx-auto px-4">
             <form onSubmit={handleSubmit} className="space-y-6">
-
-                <div className="bg-white p-6 rounded-xl border shadow-sm">
-                    <h2 className="text-lg font-bold mb-4">
+                <div className="mb-6">
+                    <h1 className="text-2xl font-bold text-gray-900">
+                        Dodaj grupę
+                    </h1>
+                    <p className="text-sm text-gray-600">
+                        Utwórz grupę kotów do wspólnej adopcji
+                    </p>
+                </div>
+                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-md">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-4">
                         Nowa grupa adopcyjna
                     </h2>
 
                     {/* NAME */}
                     <div className="mb-4">
-                        <label className="block text-sm font-semibold mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                             Nazwa grupy *
                         </label>
                         <input
@@ -63,14 +70,14 @@ export default function AddGroupPage() {
                             onChange={(e) =>
                                 setForm({ ...form, name: e.target.value })
                             }
-                            className="w-full border rounded-lg px-4 py-2"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--paw-orange)] focus:border-transparent transition-all"
                             placeholder="np. Luna & Leo"
                         />
                     </div>
 
                     {/* DESCRIPTION */}
                     <div className="mb-4">
-                        <label className="block text-sm font-semibold mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                             Opis
                         </label>
                         <textarea
@@ -78,7 +85,7 @@ export default function AddGroupPage() {
                             onChange={(e) =>
                                 setForm({ ...form, description: e.target.value })
                             }
-                            className="w-full border rounded-lg px-4 py-2"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--paw-orange)] focus:border-transparent transition-all"
                             rows={4}
                             placeholder="Krótki opis relacji kotów..."
                         />
@@ -86,7 +93,7 @@ export default function AddGroupPage() {
 
                     {/* TYPE */}
                     <div>
-                        <label className="block text-sm font-semibold mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                             Typ adopcji
                         </label>
 
@@ -98,7 +105,7 @@ export default function AddGroupPage() {
                                     adoption_type: e.target.value,
                                 })
                             }
-                            className="w-full border rounded-lg px-4 py-2"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--paw-orange)] focus:border-transparent transition-all"
                         >
                             <option value="required">
                                 Muszą iść razem
@@ -111,10 +118,10 @@ export default function AddGroupPage() {
                 </div>
 
                 {/* ACTIONS */}
-                <div className="flex gap-4">
+                <div className="flex gap-3 mt-2">
                     <Link
-                        href="/admin/cats"
-                        className="px-6 py-3 border rounded-lg"
+                        href="/admin/groups"
+                        className="px-6 py-3 bg-gray-50 text-gray-700 rounded-xl hover:bg-gray-100 transition-colors font-medium"
                     >
                         Anuluj
                     </Link>
@@ -122,7 +129,7 @@ export default function AddGroupPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="flex-1 bg-orange-500 text-white px-6 py-3 rounded-lg"
+                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 cursor-pointer"
                     >
                         {loading ? "Zapisywanie..." : "Utwórz grupę"}
                     </button>

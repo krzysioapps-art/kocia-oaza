@@ -214,6 +214,7 @@ export default async function CatPage({
                             </Suspense>
 
                             {/* Quick adoption CTA - Mobile */}
+                            {cat.status !== "adopted" && (
                             <div className="lg:hidden mt-6 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-3xl p-6 text-white shadow-xl">
                                 <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "'Caveat', cursive" }}>
                                     Chcę adoptować {cat.name}!
@@ -229,6 +230,7 @@ export default async function CatPage({
                                     <span>Wypełnij formularz</span>
                                 </Link>
                             </div>
+                            )}
                         </div>
 
                         {/* Right: Info */}
@@ -270,9 +272,30 @@ export default async function CatPage({
                                     {/* Status */}
                                     <div>
                                         <span className="text-sm text-[var(--soft-brown)]">Status</span>
-                                        <p className="font-semibold">
-                                            {getStatusLabel(cat.status, cat.gender)}
-                                        </p>
+                                        <div className="mt-1">
+                                            <span
+                                                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold ${cat.status === "available"
+                                                        ? "bg-green-500 text-white"
+                                                        : cat.status === "reserved"
+                                                            ? "bg-yellow-400 text-white"
+                                                            : "bg-gray-400 text-white"
+                                                    }`}
+                                            >
+                                                <span
+                                                    className={`w-2 h-2 rounded-full ${cat.status === "available"
+                                                            ? "bg-green-200"
+                                                            : cat.status === "reserved"
+                                                                ? "bg-yellow-200"
+                                                                : "bg-gray-200"
+                                                        }`}
+                                                />
+                                                {cat.status === "available"
+                                                    ? "Szuka domu"
+                                                    : cat.status === "reserved"
+                                                        ? "W trakcie adopcji"
+                                                        : "Ma już dom"}
+                                            </span>
+                                        </div>
                                     </div>
 
                                     {/* Lokalizacja */}
@@ -423,39 +446,6 @@ export default async function CatPage({
                                             }
                                         />
 
-                                        <ViralBadge
-                                            label="FIP"
-                                            value={
-                                                cat.fip_status === "none"
-                                                    ? "brak"
-                                                    : cat.fip_status === "recovered"
-                                                        ? "wyleczony"
-                                                        : cat.fip_status === "suspected"
-                                                            ? "podejrzenie"
-                                                            : cat.fip_status === "confirmed"
-                                                                ? "potwierdzony"
-                                                                : "brak danych"
-                                            }
-                                            color={
-                                                cat.fip_status === "none"
-                                                    ? "bg-green-100 text-green-700 border-green-200"
-                                                    : cat.fip_status === "recovered"
-                                                        ? "bg-blue-100 text-blue-700 border-blue-200"
-                                                        : cat.fip_status === "suspected" ||
-                                                            cat.fip_status === "confirmed"
-                                                            ? "bg-orange-100 text-orange-700 border-orange-200"
-                                                            : "bg-gray-100 text-gray-500 border-gray-200"
-                                            }
-                                            description={
-                                                <>
-                                                    <p className="font-semibold mb-1">FIP</p>
-                                                    <p className="text-[var(--soft-brown)]">
-                                                        Choroba wirusowa występująca tylko u kotów — <strong>nie zaraża ludzi.</strong>
-                                                        Obecnie w wielu przypadkach możliwe jest skuteczne leczenie.
-                                                    </p>
-                                                </>
-                                            }
-                                        />
 
                                     </div>
                                 </div>
@@ -563,6 +553,7 @@ export default async function CatPage({
                             )}
 
                             {/* Desktop CTA */}
+                            {cat.status !== "adopted" && (
                             <div className="hidden lg:block sticky bottom-6">
                                 <div className="bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-3xl p-8 text-white shadow-2xl">
                                     <h3 className="text-3xl font-bold mb-3" style={{ fontFamily: "'Caveat', cursive" }}>
@@ -583,6 +574,7 @@ export default async function CatPage({
                                     </p>
                                 </div>
                             </div>
+                            )}
                         </div>
                     </div>
                 </div>

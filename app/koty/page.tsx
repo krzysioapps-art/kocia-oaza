@@ -10,6 +10,7 @@ interface Cat {
   name: string;
   slug: string;
   gender: "male" | "female";
+  status: "available" | "reserved" | "adopted";
   birth_date?: string | null;
   tags?: string[];
   good_with_children?: boolean;
@@ -39,7 +40,6 @@ export default function CatsPage() {
       const { data: catsData } = await supabase
         .from("cats")
         .select("*")
-        .eq("status", "available")
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
 
@@ -87,7 +87,7 @@ export default function CatsPage() {
         if (activeFilters.has("children")) checks.push(cat.good_with_children === true);
         if (activeFilters.has("cats")) checks.push(cat.good_with_cats === true);
         if (activeFilters.has("dogs")) checks.push(cat.good_with_dogs === true);
-        
+
         if (activeFilters.has("young") || activeFilters.has("adult") || activeFilters.has("senior")) {
           if (!cat.birth_date) {
             // Jeśli nie ma daty urodzenia, pomijamy filtry wiekowe
@@ -98,12 +98,12 @@ export default function CatsPage() {
           const now = new Date();
           let years = now.getFullYear() - birth.getFullYear();
           let months = now.getMonth() - birth.getMonth();
-          
+
           if (months < 0) {
             years--;
             months += 12;
           }
-          
+
           const totalMonths = years * 12 + months;
 
           if (activeFilters.has("young")) {
@@ -257,18 +257,17 @@ export default function CatsPage() {
                   <button
                     key={filter.key}
                     onClick={() => toggleFilter(filter.key)}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all text-sm ${
-                      isActive
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all text-sm ${isActive
                         ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white shadow-md"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                      }`}
                   >
                     <span className="material-icons text-base">{filter.icon}</span>
                     <span className="hidden lg:inline">{filter.label}</span>
                   </button>
                 );
               })}
-              
+
               {/* More filters dropdown */}
               <div className="relative">
                 <button
@@ -278,7 +277,7 @@ export default function CatsPage() {
                   <span className="material-icons text-base">more_horiz</span>
                   <span>Więcej</span>
                 </button>
-                
+
                 {showMoreFilters && (
                   <>
                     <div
@@ -295,11 +294,10 @@ export default function CatsPage() {
                               toggleFilter(filter.key);
                               setShowMoreFilters(false);
                             }}
-                            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg font-medium transition-all text-sm mb-1 last:mb-0 ${
-                              isActive
+                            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg font-medium transition-all text-sm mb-1 last:mb-0 ${isActive
                                 ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white"
                                 : "text-gray-700 hover:bg-gray-100"
-                            }`}
+                              }`}
                           >
                             <span className="material-icons text-base">{filter.icon}</span>
                             <span>{filter.label}</span>
@@ -334,11 +332,10 @@ export default function CatsPage() {
                     <button
                       key={filter.key}
                       onClick={() => toggleFilter(filter.key)}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all text-sm ${
-                        isActive
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all text-sm ${isActive
                           ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white shadow-md"
                           : "bg-gray-100 text-gray-700"
-                      }`}
+                        }`}
                     >
                       <span className="material-icons text-base">{filter.icon}</span>
                       <span>{filter.label}</span>
@@ -346,7 +343,7 @@ export default function CatsPage() {
                   );
                 })}
               </div>
-              
+
               {!activeFilters.has("all") && activeFilters.size > 0 && (
                 <button
                   onClick={() => {
@@ -435,13 +432,38 @@ export default function CatsPage() {
                     {/* Gender Badge */}
                     <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
                       <span
-                        className={`material-icons text-2xl ${
-                          cat.gender === "male"
+                        className={`material-icons text-2xl ${cat.gender === "male"
                             ? "text-blue-500"
                             : "text-pink-500"
-                        }`}
+                          }`}
                       >
                         {cat.gender === "male" ? "male" : "female"}
+                      </span>
+                    </div>
+
+                    {/* Status Badge */}
+                    <div className="absolute top-4 left-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-bold shadow-md flex items-center gap-2 ${cat.status === "available"
+                            ? "bg-green-500 text-white"
+                            : cat.status === "reserved"
+                              ? "bg-yellow-400 text-white"
+                              : "bg-gray-400 text-white"
+                          }`}
+                      >
+                        <span
+                          className={`w-2 h-2 rounded-full ${cat.status === "available"
+                              ? "bg-green-200"
+                              : cat.status === "reserved"
+                                ? "bg-yellow-200"
+                                : "bg-gray-200"
+                            }`}
+                        />
+                        {cat.status === "available"
+                          ? "Szuka domu"
+                          : cat.status === "reserved"
+                            ? "W trakcie adopcji"
+                            : "Ma już dom"}
                       </span>
                     </div>
                   </div>

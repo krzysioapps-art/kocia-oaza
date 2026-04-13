@@ -128,18 +128,25 @@ export default function EditGroupPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto px-4 space-y-8">
-
+        <div className="max-w-3xl mx-auto px-4 space-y-6">
+            <div className="space-y-1">
+                <h1 className="text-2xl font-bold text-gray-900">
+                    Edytuj grupę
+                </h1>
+                <p className="text-sm text-gray-600">
+                    Zarządzaj ustawieniami i przypisanymi kotami
+                </p>
+            </div>
             {/* FORM */}
-            <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl border shadow-sm">
-                <h2 className="text-lg font-bold mb-4">
+            <form onSubmit={handleSubmit} className="bg-white rounded-xl p-6 border border-gray-200 shadow-md">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">
                     Edycja grupy
                 </h2>
 
                 <div className="space-y-4">
 
                     <div>
-                        <label className="block text-sm font-semibold mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                             Nazwa
                         </label>
                         <input
@@ -147,12 +154,12 @@ export default function EditGroupPage() {
                             onChange={(e) =>
                                 setForm({ ...form, name: e.target.value })
                             }
-                            className="w-full border rounded-lg px-4 py-2"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--paw-orange)] focus:border-transparent transition-all"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                             Opis
                         </label>
                         <textarea
@@ -160,13 +167,13 @@ export default function EditGroupPage() {
                             onChange={(e) =>
                                 setForm({ ...form, description: e.target.value })
                             }
-                            className="w-full border rounded-lg px-4 py-2"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--paw-orange)] focus:border-transparent transition-all"
                             rows={4}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                             Typ adopcji
                         </label>
 
@@ -178,7 +185,7 @@ export default function EditGroupPage() {
                                     adoption_type: e.target.value,
                                 })
                             }
-                            className="w-full border rounded-lg px-4 py-2"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--paw-orange)] focus:border-transparent transition-all"
                         >
                             <option value="required">Muszą razem</option>
                             <option value="preferred">Preferowane razem</option>
@@ -186,10 +193,10 @@ export default function EditGroupPage() {
                     </div>
                 </div>
 
-                <div className="flex gap-4 mt-6">
+                <div className="flex gap-3 mt-4">
                     <Link
                         href="/admin/groups"
-                        className="px-4 py-2 border rounded-lg"
+                        className="px-6 py-2 bg-gray-50 text-gray-700 rounded-xl hover:bg-gray-100 transition-colors font-medium"
                     >
                         Wróć
                     </Link>
@@ -197,7 +204,7 @@ export default function EditGroupPage() {
                     <button
                         type="submit"
                         disabled={saving}
-                        className="flex-1 bg-orange-500 text-white px-4 py-2 rounded-lg"
+                        className="flex-1 flex items-center justify-center gap-2 px-6 py-2 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-xl font-semibold hover:shadow-lg transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
                         {saving ? "Zapisywanie..." : "Zapisz"}
                     </button>
@@ -205,8 +212,8 @@ export default function EditGroupPage() {
             </form>
 
             {/* CATS IN GROUP */}
-            <div className="bg-white p-6 rounded-xl border shadow-sm">
-                <h3 className="font-semibold mb-4">
+            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-md">
+                <h3 className="text-sm font-medium text-gray-700 mb-4">
                     Koty w tej grupie ({cats.length})
                 </h3>
 
@@ -214,26 +221,26 @@ export default function EditGroupPage() {
                     {cats.map((cat) => (
                         <div
                             key={cat.id}
-                            className="flex justify-between items-center border rounded-lg p-3"
+                            className="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 transition-colors"
                         >
                             <div>
                                 <p className="font-medium">{cat.name}</p>
-                                <p className="text-xs text-gray-500">
+                                <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600">
                                     {cat.status}
-                                </p>
+                                </span>
                             </div>
 
                             <div className="flex gap-2">
                                 <Link
                                     href={`/admin/cats/${cat.id}/edit`}
-                                    className="px-3 py-1 border rounded"
+                                    className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
                                 >
                                     Edytuj
                                 </Link>
 
                                 <button
                                     onClick={() => removeCat(cat.id)}
-                                    className="px-3 py-1 border rounded text-red-600"
+                                    className="px-3 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
                                 >
                                     Usuń
                                 </button>

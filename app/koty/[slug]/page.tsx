@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { CatMediaSection } from "@/components/CatMediaSection";
 import { ViralBadge } from "@/components/ViralBadge";
 
+
 type CatWithMedia = {
     id: string;
     name: string;
@@ -15,6 +16,25 @@ type CatWithMedia = {
         is_primary: boolean;
     }[];
 };
+
+export async function generateMetadata({
+    params,
+}: {
+    params: { slug: string };
+}) {
+    const { slug } = params;
+
+    const { data: cat } = await supabase
+        .from("cats")
+        .select("name, description")
+        .eq("slug", slug)
+        .single();
+
+    return {
+        title: `${cat?.name} szuka domu | Kocia Oaza`,
+        description: cat?.description?.slice(0, 160),
+    };
+}
 
 export default async function CatPage({
     params,
@@ -501,12 +521,12 @@ export default async function CatPage({
 
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                         {groupCats.map((c) => {
-                                         const img = c.cat_media?.find((m) => m.is_primary);
+                                            const img = c.cat_media?.find((m) => m.is_primary);
 
                                             return (
                                                 <Link
                                                     key={c.id}
-                                                    href={`/${c.slug}`}
+                                                    href={`/koty/${c.slug}`}
                                                     className="bg-white border border-[var(--warm-coral)]/20 rounded-xl overflow-hidden hover:shadow-lg transition-all hover:scale-[1.02]"
                                                 >
                                                     {img && (

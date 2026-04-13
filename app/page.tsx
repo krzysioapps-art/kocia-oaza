@@ -4,11 +4,12 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [cats, setCats] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const MotionLink = motion(Link);
   useEffect(() => {
     const fetchCats = async () => {
       setIsLoading(true);
@@ -77,29 +78,58 @@ export default function Home() {
 
         {/* CONTENT */}
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-          <div className="max-w-4xl text-center flex flex-col items-center">
+          <motion.div
+            className="max-w-4xl text-center flex flex-col items-center"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.2,
+                },
+              },
+            }}
+          >
 
             {/* HEADLINE */}
-            <h1
+            <motion.h1
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6"
               style={{
                 fontFamily: "'Caveat', cursive",
                 textShadow: "0 4px 25px rgba(0,0,0,0.5)",
               }}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.6 }}
             >
               Ratujemy koty. Pomóż im znaleźć dom.
-            </h1>
+            </motion.h1>
 
             {/* SUBTEXT */}
-            <p
+            <motion.p
               className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/95 mb-10 max-w-2xl leading-relaxed"
               style={{ textShadow: "0 2px 15px rgba(0,0,0,0.4)" }}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.6 }}
             >
               Każdy z nich ma swoją historię. Teraz szuka bezpiecznego domu.
-            </p>
+            </motion.p>
 
             {/* CTA BUTTONS */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+            <motion.div
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.5 }}
+            >
 
               <Link
                 href="/koty"
@@ -117,8 +147,8 @@ export default function Home() {
                 <span className="material-icons text-xl">arrow_forward</span>
               </Link>
 
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -179,12 +209,13 @@ export default function Home() {
                 description: "Szukamy odpowiednich domów",
               },
             ].map((item, index) => (
-              <div
+              <motion.div
                 key={index}
                 className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all hover:-translate-y-1"
-                style={{
-                  animation: `fadeInUp 0.6s ease-out ${index * 0.1}s backwards`,
-                }}
+                initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
               >
                 <div className="w-14 h-14 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-xl flex items-center justify-center mb-4">
                   <span className="material-icons text-white text-2xl">
@@ -195,7 +226,7 @@ export default function Home() {
                   {item.title}
                 </h3>
                 <p className="text-[var(--soft-brown)] text-sm">{item.description}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -244,13 +275,14 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {cats.map((cat, index) => (
-                <Link
+                <MotionLink
                   key={cat.id}
                   href={`/koty/${cat.slug}`}
                   className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all hover:-translate-y-2"
-                  style={{
-                    animation: `fadeInUp 0.6s ease-out ${index * 0.05}s backwards`,
-                  }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  viewport={{ once: true }}
                 >
                   <div className="aspect-square relative overflow-hidden bg-gray-100">
                     {cat.image_url ? (
@@ -276,7 +308,7 @@ export default function Home() {
                       {cat.gender === "male" ? "Kotek" : "Kotka"}
                     </p>
                   </div>
-                </Link>
+                </MotionLink>
               ))}
             </div>
           )}
@@ -330,12 +362,13 @@ export default function Home() {
                 color: "from-blue-500 to-cyan-500",
               },
             ].map((item, index) => (
-              <div
+              <motion.div
                 key={index}
                 className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all"
-                style={{
-                  animation: `fadeInUp 0.6s ease-out ${index * 0.15}s backwards`,
-                }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
+                viewport={{ once: true }}
               >
                 <div
                   className={`w-16 h-16 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center mb-4`}
@@ -357,7 +390,7 @@ export default function Home() {
                   <span>{item.cta}</span>
                   <span className="material-icons text-base">arrow_forward</span>
                 </Link>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -388,12 +421,13 @@ export default function Home() {
                 icon: "warning_amber",
               },
             ].map((item, index) => (
-              <div
+              <motion.div
                 key={index}
                 className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer group"
-                style={{
-                  animation: `fadeInUp 0.6s ease-out ${index * 0.1}s backwards`,
-                }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                viewport={{ once: true }}
               >
                 <div className="w-12 h-12 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                   <span className="material-icons text-white text-xl">
@@ -403,7 +437,7 @@ export default function Home() {
                 <h3 className="text-lg font-bold text-[var(--deep-brown)] group-hover:text-[var(--paw-orange)] transition-colors">
                   {item.title}
                 </h3>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -452,12 +486,13 @@ export default function Home() {
                 icon: "task_alt",
               },
             ].map((step, index) => (
-              <div
+              <motion.div
                 key={index}
                 className="relative text-center"
-                style={{
-                  animation: `fadeInUp 0.6s ease-out ${index * 0.15}s backwards`,
-                }}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
+                viewport={{ once: true }}
               >
                 <div className="relative inline-block mb-4">
                   <div className="w-28 h-28 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-full flex items-center justify-center shadow-lg relative z-10">
@@ -477,7 +512,7 @@ export default function Home() {
                 <p className="text-[var(--soft-brown)]">
                   {step.description}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -531,18 +566,7 @@ export default function Home() {
         </div>
       </section>
 
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
+
     </div>
   );
 }

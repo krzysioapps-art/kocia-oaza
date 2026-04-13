@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import UpdatesTeaser from "@/components/UpdatesTeaser";
 
 export default function Home() {
   const [cats, setCats] = useState<any[]>([]);
@@ -20,7 +21,7 @@ export default function Home() {
         .eq("status", "available")
         .is("deleted_at", null)
         .order("created_at", { ascending: false })
-        .limit(8);
+        .limit(4);
 
       const catsWithImages = await Promise.all(
         (catsData || []).map(async (cat) => {
@@ -243,7 +244,7 @@ export default function Home() {
       </section>
 
       {/* CATS PREVIEW */}
-      <section id="koty" className="py-16 md:py-20 bg-gradient-to-br from-[var(--soft-peach)] to-[var(--warm-cream)]">
+      <section className="py-16 md:py-20 bg-[var(--background)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2
@@ -319,6 +320,35 @@ export default function Home() {
               className="inline-flex items-center gap-2 px-7 py-3 bg-[var(--paw-orange)] text-white rounded-full font-semibold text-base hover:shadow-lg hover:scale-[1.02] transition-all"
             >
               <span>Zobacz wszystkie koty</span>
+              <span className="material-icons text-xl">arrow_forward</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* UPDATES TEASER */}
+      <section className="py-16 md:py-20 bg-[var(--background)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2
+              className="text-3xl md:text-5xl font-bold text-[var(--deep-brown)] mb-4"
+              style={{ fontFamily: "'Caveat', cursive" }}
+            >
+              Co u nas nowego
+            </h2>
+            <p className="text-lg md:text-xl text-[var(--soft-brown)]">
+              Zobacz najnowsze historie i aktualizacje naszych podopiecznych
+            </p>
+          </div>
+
+          <UpdatesTeaser />
+
+          <div className="text-center mt-10">
+            <Link
+              href="/aktualnosci"
+              className="inline-flex items-center gap-2 px-7 py-3 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-semibold text-base hover:shadow-lg hover:scale-[1.02] transition-all"
+            >
+              <span>Zobacz wszystkie aktualności</span>
               <span className="material-icons text-xl">arrow_forward</span>
             </Link>
           </div>

@@ -46,6 +46,8 @@ export default function EditCatPage() {
 
     const [groups, setGroups] = useState<any[]>([]);
 
+    const [createUpdate, setCreateUpdate] = useState(false);
+
     const CAT_LOCATIONS = ["kociarnia", "dt", "cafe", "ds"] as const;
 
     const CAT_LOCATION_LABELS: Record<(typeof CAT_LOCATIONS)[number], string> = {
@@ -93,6 +95,22 @@ export default function EditCatPage() {
         fetchMedia();
         fetchGroups();
     }, [catId]);
+
+    const [autoUpdateTriggered, setAutoUpdateTriggered] = useState(false);
+
+    useEffect(() => {
+        if (!cat || autoUpdateTriggered) return;
+
+        const changed =
+            form.name !== cat.name ||
+           (form.description || "") !== (cat.description || "") ||
+            form.status !== cat.status;
+
+        if (changed) {
+            setCreateUpdate(true);
+            setAutoUpdateTriggered(true);
+        }
+    }, [form, cat, autoUpdateTriggered]);
 
     const fetchGroups = async () => {
         const { data } = await supabase.from("cat_groups").select("*");
@@ -210,7 +228,26 @@ export default function EditCatPage() {
                 if (insertError) throw insertError;
             }
 
+            if (createUpdate) {
+                const primaryMedia =
+                    media.find((m) => m.is_primary) || media[0];
+
+                await supabase.from("updates").insert({
+                    type: "update",
+                    title: `${form.name} – aktualizacja`,
+                    content:
+                        form.description?.slice(0, 120) ||
+                        `${form.name} jest pod naszą opieką i szuka domu.`,
+                    cat_id: catId,
+                    media_url: primaryMedia?.url || null,
+                    media_type: primaryMedia?.media_type || "image",
+                    is_published: true,
+                });
+            }
+
             alert("Zmiany zostały zapisane!");
+            setAutoUpdateTriggered(false);
+            setCreateUpdate(false);
         } catch (error) {
             console.error("Error updating cat:", error);
             alert("Błąd podczas zapisywania zmian");
@@ -448,6 +485,8 @@ export default function EditCatPage() {
                     />
                 </div>
 
+               
+
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                         <span className="material-icons text-[var(--paw-orange)]">label</span>
@@ -665,6 +704,26 @@ export default function EditCatPage() {
                             )}
                         </div>
                     </div>
+                </div>
+
+                 <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                        <input
+                            type="checkbox"
+                            checked={createUpdate}
+                            onChange={(e) => setCreateUpdate(e.target.checked)}
+                            className="w-5 h-5 text-[var(--paw-orange)] rounded"
+                        />
+                        <span className="font-medium text-gray-800">
+                            Dodaj aktualność o tym kocie
+                        </span>
+                    </label>
+
+                    {createUpdate && (
+                        <p className="text-sm text-gray-600 mt-2">
+                            Zostanie utworzony wpis w aktualnościach
+                        </p>
+                    )}
                 </div>
 
                 <div className="flex gap-4">

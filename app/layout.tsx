@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   creator: "Stowarzyszenie Kocia Oaza Koci Raj",
   publisher: "Stowarzyszenie Kocia Oaza Koci Raj",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kocia-oaza.pl'),
-  
+
   openGraph: {
     type: 'website',
     locale: 'pl_PL',
@@ -54,6 +54,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      { url: "/favicon.ico" },
       { url: "/favicon.png", sizes: "32x32", type: "image/png" },
     ],
     apple: "/apple-touch-icon.png",

@@ -20,19 +20,28 @@ type CatWithMedia = {
 export async function generateMetadata({
     params,
 }: {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }) {
-    const { slug } = params;
+    const { slug } = await params;
 
     const { data: cat } = await supabase
         .from("cats")
         .select("name, description")
         .eq("slug", slug)
-        .single();
+        .maybeSingle();
+
+    if (!cat) {
+        return {
+            title: "Kotek do adopcji | Kocia Oaza",
+            description: "Poznaj koty szukające domu w Kociej Oazie.",
+        };
+    }
 
     return {
-        title: `${cat?.name} szuka domu | Kocia Oaza`,
-        description: cat?.description?.slice(0, 160),
+        title: `${cat.name} szuka domu 🐱 | Kocia Oaza`,
+        description:
+            cat.description?.slice(0, 160) ||
+            `${cat.name} szuka kochającego domu.`,
     };
 }
 
@@ -42,6 +51,8 @@ export default async function CatPage({
     params: Promise<{ slug: string }>;
 }) {
     const { slug } = await params;
+
+    console.log("SLUG:", slug); // debug
 
     const { data: cat } = await supabase
         .from("cats")

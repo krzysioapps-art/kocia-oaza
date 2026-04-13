@@ -1,224 +1,301 @@
+"use client";
+
 import Link from "next/link";
+import { Metadata } from "next";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-[var(--soft-peach)] via-[var(--muted-mauve)] to-[var(--gentle-rose)] py-16">
-        <div className="page-container text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-[var(--deep-brown)] mb-4" style={{ fontFamily: "'Caveat', cursive" }}>
+    <div className="min-h-screen overflow-x-hidden">
+      {/* HERO SECTION */}
+      <section className="relative bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] text-white py-16 overflow-hidden">
+        {/* Tło dekoracyjne */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl" />
+        </div>
+
+        {/* Content */}
+        <div className="relative page-container text-center">
+          <h1
+            className="text-4xl md:text-6xl font-bold mb-4"
+            style={{ fontFamily: "'Caveat', cursive" }}
+          >
             O nas
           </h1>
-          <p className="text-lg text-[var(--soft-brown)]">
+          <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-95">
             Poznaj naszą misję i wartości
           </p>
         </div>
-      </div>
+      </section>
+      
+      
 
-      {/* Main Content */}
-      <section className="py-16 md:py-20">
-        <div className="page-container">
+      {/* IDENTITY SECTION - Kim jesteśmy */}
+      <section className="py-20 bg-[var(--background)]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2
+            className="text-4xl md:text-5xl font-bold text-[var(--text-dark)] mb-8 text-center"
+            style={{ fontFamily: "'Caveat', cursive" }}
+          >
+            Kim jesteśmy?
+          </h2>
 
-          {/* Mission */}
-          <div className="bg-white/80 backdrop-blur rounded-3xl p-8 md:p-12 shadow-xl border border-[var(--warm-coral)]/20 mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="material-icons text-4xl text-[var(--paw-orange)]">favorite</span>
-              <h2 className="text-3xl font-bold text-[var(--deep-brown)]" style={{ fontFamily: "'Caveat', cursive" }}>
-                Kim jesteśmy?
-              </h2>
-            </div>
-
-            <p className="text-[var(--deep-brown)] leading-relaxed text-lg mb-6">
-              <strong>Kocia Oaza</strong> to inicjatywa tworzona z miłości do zwierząt. Ratujemy koty przed bezdomnością i pomagamy im znaleźć bezpieczne, kochające domy.
+          <div className="space-y-6 text-center max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-[var(--text-medium)] leading-relaxed">
+              Kocia Oaza to inicjatywa tworzona z miłości do zwierząt. Ratujemy koty przed bezdomnością i pomagamy im znaleźć bezpieczne, kochające domy.
             </p>
-
-            <p className="text-[var(--deep-brown)] leading-relaxed text-lg">
-              Naszym celem jest łączenie ludzi z kotami, które czekają na swoją szansę. Każde zwierzę zasługuje na opiekę, spokój i odpowiedzialnego opiekuna.
+            <p className="text-lg md:text-xl text-[var(--text-medium)] leading-relaxed">
+              Łączymy koty potrzebujące pomocy z ludźmi, którzy są gotowi dać im opiekę i stabilność. Każde zwierzę zasługuje na szansę na spokojne życie.
             </p>
-          </div>
-
-          <div className="bg-white/80 backdrop-blur rounded-3xl p-8 md:p-12 shadow-xl border border-[var(--warm-coral)]/20 mb-12">
-            <h2
-              className="text-3xl font-bold text-[var(--deep-brown)] mb-6"
-              style={{ fontFamily: "'Caveat', cursive" }}
-            >
-              Nasza misja
-            </h2>
-
-            <p className="text-[var(--deep-brown)] text-lg leading-relaxed mb-6">
-              Kotom pomagamy już od kilku lat, a jako stowarzyszenie działamy od 2022 roku.
-              Mamy za sobą dziesiątki udanych adopcji oraz setki wykonanych kastracji i sterylizacji.
-            </p>
-
-            <p className="text-[var(--deep-brown)] text-lg leading-relaxed mb-6">
-              Naszym celem jest <strong>ograniczanie bezdomności kotów</strong> oraz poprawa ich dobrobytu.
-              Największy nacisk kładziemy na kastrację — to najskuteczniejszy sposób walki z bezdomnością.
-            </p>
-
-            <p className="text-[var(--deep-brown)] text-lg leading-relaxed mb-6">
-              Ratujemy koty chore, porzucone i zapomniane. Trafiają do nas zwierzęta,
-              które często nie mają już żadnych szans — a my staramy się je im przywrócić.
-            </p>
-
-            <p className="text-[var(--deep-brown)] text-lg leading-relaxed mb-6">
-              Opiekujemy się również kotami wolnożyjącymi — dokarmiamy je,
-              leczymy i kastrujemy. Obecnie mamy pod opieką kilka stad kotów,
-              które regularnie wspieramy.
-            </p>
-
-            <p className="text-[var(--deep-brown)] text-lg leading-relaxed">
-              Działamy jako niewielkie stowarzyszenie, ale wierzymy,
-              że z czasem nasz zasięg i możliwości będą coraz większe.
-            </p>
-          </div>
-
-
-
-
-          <div className="mb-12">
-            <h2
-              className="text-3xl font-bold text-[var(--deep-brown)] mb-8 text-center"
-              style={{ fontFamily: "'Caveat', cursive" }}
-            >
-              Jak pomagamy?
-            </h2>
-
-            <div className="grid md:grid-cols-3 gap-6">
-
-              <div className="bg-white/80 backdrop-blur rounded-2xl p-6 border border-[var(--warm-coral)]/20 shadow-lg text-center">
-                <span className="material-icons text-4xl text-[var(--paw-orange)] mb-3">
-                  public
-                </span>
-                <h3 className="font-bold text-[var(--deep-brown)] mb-2">
-                  Walczymy z bezdomnością
-                </h3>
-                <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
-                  Działamy, aby ograniczyć liczbę bezdomnych kotów i poprawić ich warunki życia
-                </p>
-              </div>
-
-              <div className="bg-white/80 backdrop-blur rounded-2xl p-6 border border-[var(--warm-coral)]/20 shadow-lg text-center">
-                <span className="material-icons text-4xl text-[var(--paw-orange)] mb-3">
-                  content_cut
-                </span>
-                <h3 className="font-bold text-[var(--deep-brown)] mb-2">
-                  Kastrujemy koty wolnożyjące
-                </h3>
-                <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
-                  Wspieramy kontrolę populacji poprzez kastrację i opiekę nad kotami wolno żyjącymi
-                </p>
-              </div>
-
-              <div className="bg-white/80 backdrop-blur rounded-2xl p-6 border border-[var(--warm-coral)]/20 shadow-lg text-center">
-                <span className="material-icons text-4xl text-[var(--paw-orange)] mb-3">
-                  medical_services
-                </span>
-                <h3 className="font-bold text-[var(--deep-brown)] mb-2">
-                  Pomagamy w sterylizacji
-                </h3>
-                <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
-                  Pomagamy opiekunom w organizacji i finansowaniu zabiegów sterylizacji
-                </p>
-              </div>
-
-            </div>
-          </div>
-
-          {/* What we do */}
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-[var(--deep-brown)] mb-8 text-center" style={{ fontFamily: "'Caveat', cursive" }}>
-              Co robimy?
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-[var(--soft-peach)] to-[var(--gentle-rose)] rounded-2xl p-6 border border-[var(--warm-coral)]/20">
-                <div className="flex items-start gap-4">
-                  <span className="material-icons text-3xl text-[var(--paw-orange)]">pets</span>
-                  <div>
-                    <h3 className="text-xl font-bold text-[var(--deep-brown)] mb-2">Pomagamy w adopcji kotów</h3>
-                    <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
-                      Łączymy koty potrzebujące domu z osobami gotowymi dać im miłość i bezpieczeństwo
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-[var(--soft-peach)] to-[var(--gentle-rose)] rounded-2xl p-6 border border-[var(--warm-coral)]/20">
-                <div className="flex items-start gap-4">
-                  <span className="material-icons text-3xl text-[var(--paw-orange)]">campaign</span>
-                  <div>
-                    <h3 className="text-xl font-bold text-[var(--deep-brown)] mb-2">Publikujemy aktualne ogłoszenia</h3>
-                    <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
-                      Regularnie aktualizujemy informacje o kotach szukających domu
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-[var(--soft-peach)] to-[var(--gentle-rose)] rounded-2xl p-6 border border-[var(--warm-coral)]/20">
-                <div className="flex items-start gap-4">
-                  <span className="material-icons text-3xl text-[var(--paw-orange)]">group</span>
-                  <div>
-                    <h3 className="text-xl font-bold text-[var(--deep-brown)] mb-2">Wspieramy opiekunów i wolontariuszy</h3>
-                    <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
-                      Tworzymy sieć wsparcia dla osób zaangażowanych w pomoc zwierzętom
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-[var(--soft-peach)] to-[var(--gentle-rose)] rounded-2xl p-6 border border-[var(--warm-coral)]/20">
-                <div className="flex items-start gap-4">
-                  <span className="material-icons text-3xl text-[var(--paw-orange)]">school</span>
-                  <div>
-                    <h3 className="text-xl font-bold text-[var(--deep-brown)] mb-2">Edukujemy w zakresie opieki</h3>
-                    <p className="text-[var(--soft-brown)] text-sm leading-relaxed">
-                      Dzielimy się wiedzą o potrzebach kotów i odpowiedzialnej opiece
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Contact */}
-          <div className="bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-3xl p-8 md:p-12 text-white text-center shadow-2xl">
-            <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: "'Caveat', cursive" }}>
-              Skontaktuj się z nami
-            </h2>
-
-            <div className="flex flex-col md:flex-row gap-6 justify-center items-center mb-8">
-              <a href="mailto:kocia.oaza@gmail.com" className="flex items-center gap-2 text-lg hover:underline">
-                <span className="material-icons">email</span>
-                kocia.oaza@gmail.com
-              </a>
-              <a href="tel:515621000" className="flex items-center gap-2 text-lg hover:underline">
-                <span className="material-icons">phone</span>
-                515 621 000
-              </a>
-              <span className="flex items-center gap-2 text-lg">
-                <span className="material-icons">location_on</span>
-                Warszawa
-              </span>
-            </div>
-
-            <p className="text-sm opacity-90">
-              Strona ma charakter informacyjny i wspiera działania na rzecz zwierząt.
-            </p>
-          </div>
-
-          {/* Back to cats */}
-          <div className="mt-12 text-center">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all"
-            >
-              <span className="material-icons">arrow_back</span>
-              <span>Wróć do kotów</span>
-            </Link>
           </div>
         </div>
       </section>
+
+      {/* MISSION SECTION - Nasza misja */}
+      <section className="py-20 bg-gradient-to-br from-[var(--soft-peach)] to-[var(--warm-cream)]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2
+            className="text-4xl md:text-5xl font-bold text-[var(--text-dark)] mb-12 text-center"
+            style={{ fontFamily: "'Caveat', cursive" }}
+          >
+            Nasza misja
+          </h2>
+
+          <div className="space-y-6 max-w-3xl mx-auto">
+            <div className="bg-white rounded-2xl p-8 shadow-lg">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <span className="material-icons text-[var(--paw-orange)] text-3xl">
+                    track_changes
+                  </span>
+                </div>
+                <p className="text-lg text-[var(--text-medium)] leading-relaxed">
+                  Naszym celem jest ograniczanie bezdomności kotów oraz poprawa ich dobrobytu.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 shadow-lg">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <span className="material-icons text-[var(--paw-orange)] text-3xl">
+                    health_and_safety
+                  </span>
+                </div>
+                <p className="text-lg text-[var(--text-medium)] leading-relaxed">
+                  Największy nacisk kładziemy na kastrację — to najskuteczniejszy sposób walki z bezdomnością.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 shadow-lg">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <span className="material-icons text-[var(--paw-orange)] text-3xl">
+                    emergency
+                  </span>
+                </div>
+                <p className="text-lg text-[var(--text-medium)] leading-relaxed">
+                  Ratujemy koty chore, porzucone i zapomniane. Trafiają do nas zwierzęta, które często nie mają już żadnych szans — a my staramy się je im przywrócić.
+                </p>
+              </div>
+            </div>
+
+             <div className="bg-white rounded-2xl p-8 shadow-lg">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <span className="material-icons text-[var(--paw-orange)] text-3xl">
+                    eco
+                  </span>
+                </div>
+                <p className="text-lg text-[var(--text-medium)] leading-relaxed">
+                Opiekujemy się również kotami wolno żyjącymi — dokarmiamy je, leczymy i kastrujemy.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 shadow-lg">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <span className="material-icons text-[var(--paw-orange)] text-3xl">
+                    groups
+                  </span>
+                </div>
+                <p className="text-lg text-[var(--text-medium)] leading-relaxed">
+                  Działamy jako niewielkie stowarzyszenie, ale wierzymy, że z czasem nasz zasięg i możliwości będą coraz większe.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* IMPACT SUMMARY SECTION - Co jest dla nas najważniejsze */}
+      <section className="py-20 bg-[var(--background)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2
+            className="text-4xl md:text-5xl font-bold text-[var(--text-dark)] mb-12 text-center"
+            style={{ fontFamily: "'Caveat', cursive" }}
+          >
+            Co jest dla nas najważniejsze
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div
+              className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+              style={{ animation: "fadeInUp 0.6s ease-out 0s backwards" }}
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-2xl flex items-center justify-center mb-6">
+                <span className="material-icons text-white text-3xl">
+                  favorite
+                </span>
+              </div>
+              <h3 className="text-2xl font-bold text-[var(--text-dark)] mb-4">
+                Odpowiedzialna pomoc
+              </h3>
+              <p className="text-lg text-[var(--text-medium)] leading-relaxed">
+                Każdemu kotu poświęcamy tyle czasu i uwagi, ile potrzebuje — od leczenia po znalezienie domu.
+              </p>
+            </div>
+
+            <div
+              className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+              style={{ animation: "fadeInUp 0.6s ease-out 0.1s backwards" }}
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-2xl flex items-center justify-center mb-6">
+                <span className="material-icons text-white text-3xl">
+                  trending_up
+                </span>
+              </div>
+              <h3 className="text-2xl font-bold text-[var(--text-dark)] mb-4">
+                Realna zmiana
+              </h3>
+              <p className="text-lg text-[var(--text-medium)] leading-relaxed">
+                Skupiamy się na działaniach, które realnie ograniczają bezdomność — przede wszystkim kastracji.
+              </p>
+            </div>
+
+            <div
+              className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+              style={{ animation: "fadeInUp 0.6s ease-out 0.2s backwards" }}
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-2xl flex items-center justify-center mb-6">
+                <span className="material-icons text-white text-3xl">
+                  verified_user
+                </span>
+              </div>
+              <h3 className="text-2xl font-bold text-[var(--text-dark)] mb-4">
+                Dopasowane adopcje
+              </h3>
+              <p className="text-lg text-[var(--text-medium)] leading-relaxed">
+                Dbamy o to, aby każdy kot trafił do odpowiedniego domu — nie działamy przypadkowo.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA SECTION - Zobacz jak pomagamy */}
+      <section className="py-20 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2
+            className="text-4xl md:text-5xl font-bold mb-6 leading-tight"
+            style={{ fontFamily: "'Caveat', cursive" }}
+          >
+            Zobacz, jak pomagamy w praktyce
+          </h2>
+          <p className="text-xl md:text-2xl mb-10 opacity-95 leading-relaxed max-w-2xl mx-auto">
+            Poznaj dokładnie, jak wygląda nasza codzienna pomoc kotom — od interwencji po adopcję.
+          </p>
+
+          <Link
+            href="/jak-pomagamy"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-[var(--paw-orange)] rounded-full font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all"
+          >
+            <span>Jak pomagamy</span>
+            <span className="material-icons">arrow_forward</span>
+          </Link>
+        </div>
+      </section>
+
+      {/* CONTACT SECTION */}
+      <section className="py-20 bg-[var(--background)]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2
+            className="text-4xl md:text-5xl font-bold text-[var(--text-dark)] mb-12 text-center"
+            style={{ fontFamily: "'Caveat', cursive" }}
+          >
+            Skontaktuj się z nami
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all">
+              <div className="w-16 h-16 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-full flex items-center justify-center mb-4 mx-auto">
+                <span className="material-icons text-white text-3xl">
+                  email
+                </span>
+              </div>
+              <h3 className="text-lg font-bold text-[var(--text-dark)] mb-2">
+                Email
+              </h3>
+              <a
+                href="mailto:kocia.oaza@gmail.com"
+                className="text-[var(--paw-orange)] hover:underline text-lg"
+              >
+                kocia.oaza@gmail.com
+              </a>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all">
+              <div className="w-16 h-16 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-full flex items-center justify-center mb-4 mx-auto">
+                <span className="material-icons text-white text-3xl">
+                  phone
+                </span>
+              </div>
+              <h3 className="text-lg font-bold text-[var(--text-dark)] mb-2">
+                Telefon
+              </h3>
+              <a
+                href="tel:+48515621000"
+                className="text-[var(--paw-orange)] hover:underline text-lg"
+              >
+                515 621 000
+              </a>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all">
+              <div className="w-16 h-16 bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] rounded-full flex items-center justify-center mb-4 mx-auto">
+                <span className="material-icons text-white text-3xl">
+                  location_on
+                </span>
+              </div>
+              <h3 className="text-lg font-bold text-[var(--text-dark)] mb-2">
+                Lokalizacja
+              </h3>
+              <p className="text-[var(--text-medium)] text-lg">Warszawa</p>
+            </div>
+          </div>
+
+          <div className="bg-[var(--soft-peach)] rounded-2xl p-8 text-center max-w-2xl mx-auto">
+            <p className="text-lg text-[var(--text-medium)] leading-relaxed">
+              Strona ma charakter informacyjny i wspiera działania na rzecz zwierząt.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }

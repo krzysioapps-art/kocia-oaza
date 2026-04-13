@@ -2,23 +2,26 @@ export default function JakAdoptowacPage() {
     return (
         <div className="min-h-screen">
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-[var(--soft-peach)] via-[var(--muted-mauve)] to-[var(--gentle-rose)] py-12 md:py-16">
-                <div className="absolute inset-0 paw-pattern pointer-events-none"></div>
+            <section className="relative bg-gradient-to-br from-[var(--warm-coral)] to-[var(--paw-orange)] text-white py-16 overflow-hidden">
+        {/* Tło dekoracyjne */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl" />
+        </div>
 
-                <div className="relative z-10 page-container text-center">
-                    <div className="inline-block mb-4">
-                        <span className="material-icons" style={{ fontSize: '60px', color: 'var(--paw-orange)' }}>favorite</span>
-                    </div>
-
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--deep-brown)] mb-4 leading-tight" style={{ fontFamily: "'Caveat', cursive" }}>
-                        Jak wygląda adopcja?
-                    </h1>
-
-                    <p className="text-lg text-[var(--soft-brown)] max-w-2xl mx-auto leading-relaxed">
-                        Prosty proces, który zakończy się nową przyjaźnią
-                    </p>
-                </div>
-            </section>
+        {/* Content */}
+        <div className="relative page-container text-center">
+          <h1
+            className="text-4xl md:text-6xl font-bold mb-4"
+            style={{ fontFamily: "'Caveat', cursive" }}
+          >
+            Jak wygląda adopcja?
+          </h1>
+          <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-95">
+            Prosty proces, który zakończy się nową przyjaźnią
+          </p>
+        </div>
+      </section>
 
             {/* Adoption Process Section */}
             <section className="py-16 md:py-20 bg-white">

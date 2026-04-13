@@ -159,7 +159,7 @@ export default async function CatPage({
             {/* Back button */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 <Link
-                    href="/"
+                    href="/koty"
                     className="inline-flex items-center gap-2 text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors font-medium group"
                 >
                     <span className="material-icons group-hover:-translate-x-1 transition-transform">arrow_back</span>
@@ -628,7 +628,7 @@ export default async function CatPage({
 
                     <div className="text-center">
                         <Link
-                            href="/"
+                            href="/koty"
                             className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all"
                         >
                             <span>Zobacz wszystkie koty do adopcji</span>

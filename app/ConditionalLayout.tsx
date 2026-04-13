@@ -70,23 +70,56 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
               <Link
                 href="/"
                 className={`flex items-center h-10 leading-none font-medium transition-colors
-    ${isActive("/")
+      ${isActive("/")
                     ? "text-[var(--paw-orange)]"
                     : "text-[var(--deep-brown)] hover:text-[var(--paw-orange)]"}
-  `}
+    `}
               >
-                Koty do adopcji
+                Witaj
+              </Link>
+
+              <Link
+                href="/o-nas"
+                className={`flex items-center h-10 leading-none font-medium transition-colors
+      ${isActive("/o-nas")
+                    ? "text-[var(--paw-orange)]"
+                    : "text-[var(--deep-brown)] hover:text-[var(--paw-orange)]"}
+    `}
+              >
+                O nas
+              </Link>
+
+              <Link
+                href="/jak-pomagamy"
+                className={`flex items-center h-10 leading-none font-medium transition-colors
+      ${isActive("/jak-pomagamy")
+                    ? "text-[var(--paw-orange)]"
+                    : "text-[var(--deep-brown)] hover:text-[var(--paw-orange)]"}
+    `}
+              >
+                Jak pomagamy
+              </Link>
+
+              <Link
+                href="/koty"
+                className={`flex items-center h-10 leading-none font-medium transition-colors
+      ${isActive("/koty")
+                    ? "text-[var(--paw-orange)]"
+                    : "text-[var(--deep-brown)] hover:text-[var(--paw-orange)]"}
+    `}
+              >
+                Koty
               </Link>
 
               <Link
                 href="/jak-adoptowac"
                 className={`flex items-center h-10 leading-none font-medium transition-colors
-    ${isActive("/jak-adoptowac")
+      ${isActive("/jak-adoptowac")
                     ? "text-[var(--paw-orange)]"
                     : "text-[var(--deep-brown)] hover:text-[var(--paw-orange)]"}
-  `}
+    `}
               >
-                Jak adoptować?
+                Jak adoptować
               </Link>
 
               <Link
@@ -98,17 +131,6 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
     `}
               >
                 Porady
-              </Link>
-
-              <Link
-                href="/o-nas"
-                className={`flex items-center h-10 leading-none font-medium transition-colors
-    ${isActive("/o-nas")
-                    ? "text-[var(--paw-orange)]"
-                    : "text-[var(--deep-brown)] hover:text-[var(--paw-orange)]"}
-  `}
-              >
-                O nas
               </Link>
             </nav>
             <button
@@ -155,47 +177,72 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
             href="/"
             onClick={() => setMenuOpen(false)}
             className={`text-lg font-semibold px-3 py-2 rounded-lg transition
-    ${isActive("/")
+      ${isActive("/")
                 ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
                 : "text-[var(--deep-brown)]"}
-  `}
+    `}
           >
-            Koty do adopcji
-          </Link>
-          <Link
-            href="/jak-adoptowac"
-            onClick={() => setMenuOpen(false)}
-            className={`text-lg font-semibold px-3 py-2 rounded-lg transition
-    ${isActive("/jak-adoptowac")
-                ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
-                : "text-[var(--deep-brown)]"}
-  `}
-          >
-            Jak adoptować?
-          </Link>
-
-          <Link
-            href="/porady"
-            onClick={() => setMenuOpen(false)}
-            className={`text-lg font-semibold px-3 py-2 rounded-lg transition
-        ${isActive("/porady")
-                ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
-                : "text-[var(--deep-brown)]"}
-      `}
-          >
-            Porady
+            Witaj
           </Link>
 
           <Link
             href="/o-nas"
             onClick={() => setMenuOpen(false)}
             className={`text-lg font-semibold px-3 py-2 rounded-lg transition
-    ${isActive("/o-nas")
+      ${isActive("/o-nas")
                 ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
                 : "text-[var(--deep-brown)]"}
-  `}
+    `}
           >
             O nas
+          </Link>
+
+          <Link
+            href="/jak-pomagamy"
+            onClick={() => setMenuOpen(false)}
+            className={`text-lg font-semibold px-3 py-2 rounded-lg transition
+      ${isActive("/jak-pomagamy")
+                ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
+                : "text-[var(--deep-brown)]"}
+    `}
+          >
+            Jak pomagamy
+          </Link>
+
+          <Link
+            href="/koty"
+            onClick={() => setMenuOpen(false)}
+            className={`text-lg font-semibold px-3 py-2 rounded-lg transition
+      ${isActive("/koty")
+                ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
+                : "text-[var(--deep-brown)]"}
+    `}
+          >
+            Koty
+          </Link>
+
+          <Link
+            href="/jak-adoptowac"
+            onClick={() => setMenuOpen(false)}
+            className={`text-lg font-semibold px-3 py-2 rounded-lg transition
+      ${isActive("/jak-adoptowac")
+                ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
+                : "text-[var(--deep-brown)]"}
+    `}
+          >
+            Jak adoptować
+          </Link>
+
+          <Link
+            href="/porady"
+            onClick={() => setMenuOpen(false)}
+            className={`text-lg font-semibold px-3 py-2 rounded-lg transition
+      ${isActive("/porady")
+                ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
+                : "text-[var(--deep-brown)]"}
+    `}
+          >
+            Porady
           </Link>
         </nav>
       </div>
@@ -229,14 +276,15 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
             <div>
               <h4 className="font-semibold mb-3 text-[var(--deep-brown)]">Linki</h4>
               <ul className="space-y-2 text-sm">
-                <li>
+                 <li>
                   <Link
                     href="/"
                     className="text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors"
                   >
-                    Koty do adopcji
+                    Witaj
                   </Link>
                 </li>
+
                 <li>
                   <Link
                     href="/o-nas"
@@ -245,6 +293,43 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
                     O nas
                   </Link>
                 </li>
+
+                <li>
+                  <Link
+                    href="/jak-pomagamy"
+                    className="text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors"
+                  >
+                    Jak pomagamy
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/koty"
+                    className="text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors"
+                  >
+                    Koty
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/jak-adoptowac"
+                    className="text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors"
+                  >
+                    Jak adoptować
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/porady"
+                    className="text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors"
+                  >
+                    Porady
+                  </Link>
+                </li>
+
                 <li>
                   <Link
                     href="/polityka-prywatnosci"

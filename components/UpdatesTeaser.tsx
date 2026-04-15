@@ -10,6 +10,7 @@ interface Update {
     id: string;
     title: string;
     media_url?: string;
+    media_type?: string;
     created_at: string;
     type: string;
     cat_id?: string;
@@ -26,7 +27,7 @@ export default function UpdatesTeaser() {
 
             const { data: updatesData } = await supabase
                 .from("updates")
-                .select("id, title, media_url, created_at, type, cat_id")
+                .select("id, title, media_url, media_type, created_at, type, cat_id")
                 .order("created_at", { ascending: false })
                 .limit(3);
 
@@ -116,6 +117,8 @@ export default function UpdatesTeaser() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {updates.map((update, index) => {
+                console.log("UPDATE:", update);
+
                 const typeConfig = getTypeConfig(update.type);
                 const linkHref = update.cat_id && update.cat_slug
                     ? `/koty/${update.cat_slug}`
@@ -136,12 +139,30 @@ export default function UpdatesTeaser() {
                             {/* Media */}
                             <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-[var(--warm-cream)] to-[var(--soft-peach)]">
                                 {update.media_url ? (
-                                    <Image
-                                        src={update.media_url}
-                                        alt={update.title}
-                                        fill
-                                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                                    />
+                                    update.media_type === "video" ? (
+                                        <div className="relative w-full h-full">
+                                            <video
+                                                src={update.media_url}
+                                                className="w-full h-full object-cover"
+                                                muted
+                                                playsInline
+                                                preload="metadata"
+                                            />
+
+                                            <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                                                <span className="material-icons text-white text-5xl">
+                                                    play_circle
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <Image
+                                            src={update.media_url}
+                                            alt={update.title}
+                                            fill
+                                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                        />
+                                    )
                                 ) : (
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <span className="material-icons text-gray-300 text-6xl">

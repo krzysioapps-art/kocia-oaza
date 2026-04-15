@@ -156,7 +156,7 @@ export default function AdoptionForm() {
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 <div className="mb-8">
-                    <Link href={`/${slug}`} className="inline-flex items-center gap-2 text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors font-medium mb-6 group">
+                    <Link href={`/koty/${slug}`} className="inline-flex items-center gap-2 text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors font-medium mb-6 group">
                         <span className="material-icons group-hover:-translate-x-1 transition-transform">arrow_back</span>
                         <span>Powrót do {catName}</span>
                     </Link>

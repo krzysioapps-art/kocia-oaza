@@ -16,7 +16,10 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
   const pathname = usePathname();
   const isAdminPage = pathname?.startsWith("/admin");
   const [menuOpen, setMenuOpen] = useState(false);
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => {
+    if (path === "/") return pathname === "/"; // 🔥 tylko exact match
+    return pathname.startsWith(path);
+  };
   const isHome = pathname === "/";
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "auto";
@@ -98,6 +101,17 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
     `}
               >
                 Jak pomagamy
+              </Link>
+
+              <Link
+                href="/aktualnosci"
+                className={`flex items-center h-10 leading-none font-medium transition-colors
+    ${isActive("/aktualnosci")
+                    ? "text-[var(--paw-orange)]"
+                    : "text-[var(--deep-brown)] hover:text-[var(--paw-orange)]"}
+  `}
+              >
+                Aktualności
               </Link>
 
               <Link
@@ -210,6 +224,18 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
           </Link>
 
           <Link
+            href="/aktualnosci"
+            onClick={() => setMenuOpen(false)}
+            className={`text-lg font-semibold px-3 py-2 rounded-lg transition
+    ${isActive("/aktualnosci")
+                ? "bg-[var(--warm-coral)]/20 text-[var(--paw-orange)]"
+                : "text-[var(--deep-brown)]"}
+  `}
+          >
+            Aktualności
+          </Link>
+
+          <Link
             href="/koty"
             onClick={() => setMenuOpen(false)}
             className={`text-lg font-semibold px-3 py-2 rounded-lg transition
@@ -276,7 +302,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
             <div>
               <h4 className="font-semibold mb-3 text-[var(--deep-brown)]">Linki</h4>
               <ul className="space-y-2 text-sm">
-                 <li>
+                <li>
                   <Link
                     href="/"
                     className="text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors"
@@ -300,6 +326,15 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
                     className="text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors"
                   >
                     Jak pomagamy
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/aktualnosci"
+                    className="text-[var(--soft-brown)] hover:text-[var(--paw-orange)] transition-colors"
+                  >
+                    Aktualności
                   </Link>
                 </li>
 
@@ -389,7 +424,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
                   </svg>
                 </a>
                 <a
-                  href="https://www.tiktok.com/@kociaoaza"
+                  href="https://www.tiktok.com/@kocia.oaza"
                   className="w-10 h-10 rounded-full bg-white/50 flex items-center justify-center hover:bg-[var(--warm-coral)] hover:text-white transition-all"
                   aria-label="TikTok"
                   target="_blank"

@@ -169,7 +169,7 @@ export default function MediaGallery({
                     src={optimizeCloudinaryUrl(item.url, { quality: "auto", width: 200 })}
                     muted
                     preload="metadata"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
 
                   <div className="absolute inset-0 flex items-center justify-center">

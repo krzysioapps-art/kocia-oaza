@@ -12,12 +12,12 @@ interface Update {
     content: string;
     media_url?: string;
     created_at: string;
+    media_type?: string;
     type: "news" | "success" | "event" | "announcement";
     cat_id?: string;
     cat_name?: string;
     cat_slug?: string;
 }
-
 
 export default function UpdatesPage() {
     const router = useRouter();
@@ -25,6 +25,8 @@ export default function UpdatesPage() {
     const [updates, setUpdates] = useState<Update[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedType, setSelectedType] = useState<string>("all");
+
+    const [showMoreFilters, setShowMoreFilters] = useState(false);
 
     useEffect(() => {
         const fetchUpdates = async () => {
@@ -54,10 +56,32 @@ export default function UpdatesPage() {
         fetchUpdates();
     }, []);
 
+    useEffect(() => {
+        const handleScroll = () => setShowMoreFilters(false);
+        window.addEventListener("scroll", handleScroll);
+
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const handleKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                setShowMoreFilters(false);
+            }
+        };
+
+        window.addEventListener("keydown", handleKey);
+        return () => window.removeEventListener("keydown", handleKey);
+    }, []);
+
     const filteredUpdates =
         selectedType === "all"
             ? updates
-            : updates.filter((update) => update.type === selectedType);
+            : updates.filter((update) => {
+                if (selectedType === "video") return update.media_type === "video";
+                if (selectedType === "photo") return update.media_type === "image";
+                return update.type === selectedType;
+            });
 
     const getTypeConfig = (type: string) => {
         const configs: any = {
@@ -154,7 +178,12 @@ export default function UpdatesPage() {
         { key: "photo", label: "Zdjęcia", icon: "photo_camera" },
     ];
 
+    const extraFilters = typeFilters.slice(6);
+    const isMoreActive = extraFilters.some(f => f.key === selectedType);
+
     const shareOnFacebook = (url: string) => {
+        if (typeof window === "undefined") return;
+
         window.open(
             `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
             "_blank",
@@ -188,12 +217,16 @@ export default function UpdatesPage() {
             <section className="sticky top-[80px] z-40 bg-white shadow-md">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <div className="flex flex-wrap gap-2 justify-center">
-                        {typeFilters.map((filter) => {
+                        {/* Główne filtry */}
+                        {typeFilters.slice(0, 6).map((filter) => {
                             const isActive = selectedType === filter.key;
                             return (
                                 <button
                                     key={filter.key}
-                                    onClick={() => setSelectedType(filter.key)}
+                                    onClick={() => {
+                                        setSelectedType(filter.key);
+                                        setShowMoreFilters(false);
+                                    }}
                                     className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-all text-sm ${isActive
                                         ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white shadow-md"
                                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -204,6 +237,72 @@ export default function UpdatesPage() {
                                 </button>
                             );
                         })}
+
+                        {/* Dropdown "Więcej" */}
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowMoreFilters(!showMoreFilters)}
+                                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm ${isMoreActive
+                                    ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white shadow-md"
+                                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                    }`}
+                            >
+                                <span className="material-icons text-base">more_horiz</span>
+                                <span className="flex items-center gap-2">
+                                    <span>Więcej</span>
+                                    {isMoreActive && (
+                                        <span className="bg-white text-[var(--paw-orange)] text-xs px-2 py-0.5 rounded-full">
+                                            1
+                                        </span>
+                                    )}
+                                </span>
+                            </button>
+
+                            {showMoreFilters && (
+                                <>
+                                    {/* overlay */}
+                                    <div
+                                        className="fixed inset-0 z-10"
+                                        onClick={() => setShowMoreFilters(false)}
+                                    />
+
+                                    {/* dropdown */}
+                                    <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border border-gray-200 p-3 min-w-[220px] z-20 animate-in fade-in zoom-in-95 duration-150">
+                                        {typeFilters.slice(6).map((filter) => {
+                                            const isActive = selectedType === filter.key;
+
+                                            return (
+                                                <button
+                                                    key={filter.key}
+                                                    onClick={() => {
+                                                        setSelectedType(filter.key);
+                                                        setShowMoreFilters(false);
+                                                    }}
+                                                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg font-medium transition-all text-sm mb-1 last:mb-0 ${isActive
+                                                        ? "bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white"
+                                                        : "text-gray-700 hover:bg-gray-100"
+                                                        }`}
+                                                >
+                                                    <span className="material-icons text-base">
+                                                        {filter.icon}
+                                                    </span>
+                                                    <span>{filter.label}</span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                        {selectedType !== "all" && (
+                            <button
+                                onClick={() => setSelectedType("all")}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm text-gray-500 hover:text-[var(--paw-orange)]"
+                            >
+                                <span className="material-icons text-base">close</span>
+                                <span className="hidden sm:inline">Wyczyść</span>
+                            </button>
+                        )}
                     </div>
                 </div>
             </section>
@@ -259,7 +358,10 @@ export default function UpdatesPage() {
                                 return (
                                     <article
                                         key={update.id}
-                                        onClick={() => router.push(`/aktualnosci/${update.id}`)}
+                                        onClick={() => {
+                                            setShowMoreFilters(false);
+                                            router.push(`/aktualnosci/${update.id}`);
+                                        }}
                                         className="cursor-pointer group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all"
                                         style={{
                                             animation: `fadeInUp 0.5s ease-out ${index * 0.1}s backwards`,
@@ -270,12 +372,32 @@ export default function UpdatesPage() {
                                             {/* Media */}
                                             {update.media_url && (
                                                 <div className="md:w-2/5 relative aspect-video md:aspect-square overflow-hidden bg-gradient-to-br from-[var(--warm-cream)] to-[var(--soft-peach)]">
-                                                    <Image
-                                                        src={update.media_url}
-                                                        alt={update.title}
-                                                        fill
-                                                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                                    />
+                                                    {update.media_type === "video" ? (
+                                                        <div className="relative w-full h-full">
+                                                            <Image
+                                                                src={update.media_url
+                                                                    ?.replace("/video/upload/", "/video/upload/so_0/")
+                                                                    ?.replace(".mp4", ".jpg")}
+                                                                alt={update.title}
+                                                                fill
+                                                                loading="lazy"
+                                                                className="object-cover"
+                                                            />
+
+                                                            <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                                                                <span className="material-icons text-white text-5xl">
+                                                                    play_circle
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <Image
+                                                            src={update.media_url}
+                                                            alt={update.title}
+                                                            fill
+                                                            className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                                        />
+                                                    )}
                                                 </div>
                                             )}
 
@@ -340,7 +462,7 @@ export default function UpdatesPage() {
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/aktualnosci/${update.id}`;
+                                                            const shareUrl = `${window.location.origin}/aktualnosci/${update.id}`;
                                                             shareOnFacebook(shareUrl);
                                                         }}
                                                         className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-full font-semibold text-sm hover:bg-blue-100 transition-all"
@@ -352,6 +474,7 @@ export default function UpdatesPage() {
                                             </div>
                                         </div>
                                     </article>
+
                                 );
                             })}
                         </div>

@@ -123,38 +123,49 @@ export default function Home() {
             </motion.p>
 
             {/* CTA BUTTONS */}
-            <motion.div
-              className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 0.5 }}
-            >
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
 
-              <Link
-                href="/koty"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-semibold text-base shadow-lg hover:shadow-2xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-300"
+              {/* PRIMARY BUTTON */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+                transition={{ duration: 0.5, delay: 0.4 }}
               >
-                <span>Poznaj koty do adopcji</span>
-                <span className="material-icons text-xl">pets</span>
-              </Link>
+                <Link
+                  href="/koty"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[var(--warm-coral)] to-[var(--paw-orange)] text-white rounded-full font-semibold text-base shadow-lg hover:shadow-2xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-300"
+                >
+                  <span>Poznaj koty do adopcji</span>
+                  <span className="material-icons text-xl">pets</span>
+                </Link>
+              </motion.div>
 
-              <Link
-                href="/jak-pomagamy"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/90 backdrop-blur-md text-[var(--deep-brown)] rounded-full font-semibold text-base shadow-lg hover:bg-white hover:shadow-2xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-300"
+              {/* SECONDARY BUTTON (delayed) */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20, scale: 0.95 },
+                  visible: { opacity: 1, y: 0, scale: 1 },
+                }}
+                transition={{ duration: 0.5, delay: 0.6 }}
               >
-                <span>Jak pomagamy</span>
-                <span className="material-icons text-xl">arrow_forward</span>
-              </Link>
+                <Link
+                  href="/jak-pomagamy"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/90 backdrop-blur-md text-[var(--deep-brown)] rounded-full font-semibold text-base shadow-lg hover:bg-white hover:shadow-2xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-300"
+                >
+                  <span>Jak pomagamy</span>
+                  <span className="material-icons text-xl">arrow_forward</span>
+                </Link>
+              </motion.div>
 
-            </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* STORY TEASER */}
-      <section className="py-16 md:py-20 relative bg-gradient-to-br from-[var(--warm-cream)] to-[var(--soft-peach)]">
+      <section className="py-16 md:py-20 bg-[var(--background)]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2
             className="text-3xl md:text-5xl font-bold text-[var(--deep-brown)] mb-6"
@@ -427,7 +438,7 @@ export default function Home() {
       </section>
 
       {/* BLOG PREVIEW */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-[var(--warm-cream)] to-[var(--soft-peach)]">
+      <section className="py-16 md:py-20 bg-[var(--background)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2
             className="text-3xl md:text-5xl font-bold text-[var(--deep-brown)] mb-12 text-center"

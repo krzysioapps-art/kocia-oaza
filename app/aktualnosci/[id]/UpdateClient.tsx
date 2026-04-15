@@ -15,6 +15,8 @@ export default function UpdateClient() {
 
     const [isPlaying, setIsPlaying] = useState(false);
 
+    const [copied, setCopied] = useState(false);
+
     useEffect(() => {
         if (!id) return; // 🔥 STOP jeśli brak id
 
@@ -103,18 +105,12 @@ export default function UpdateClient() {
         });
     };
 
-    const shareOnFacebook = () => {
-        const shareUrl = `${window.location.origin}/aktualnosci/${id}`;
-        window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
-            "_blank"
-        );
-    };
-
     const copyLink = () => {
         const shareUrl = `${window.location.origin}/aktualnosci/${id}`;
         navigator.clipboard.writeText(shareUrl);
-        alert("Link skopiowany do schowka!");
+        setCopied(true);
+
+        setTimeout(() => setCopied(false), 2000);
     };
 
     if (isLoading) {
@@ -196,7 +192,7 @@ export default function UpdateClient() {
 
                     {/* Featured Image */}
                     {update.media_url && (
-                        <div className="relative w-full rounded-3xl overflow-hidden mb-8 shadow-xl bg-black flex items-center justify-center">
+                        <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden mb-8 shadow-xl">
                             {update.media_type === "video" ? (
                                 <div className="relative w-full flex items-center justify-center">
                                     <video
@@ -245,19 +241,17 @@ export default function UpdateClient() {
                             <span>Udostępnij tę aktualność</span>
                         </h3>
                         <div className="flex flex-wrap gap-3">
-                            <button
-                                onClick={shareOnFacebook}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-full font-semibold text-sm hover:bg-blue-700 hover:shadow-lg transition-all"
-                            >
-                                <span className="material-icons text-base">facebook</span>
-                                <span>Facebook</span>
-                            </button>
+
                             <button
                                 onClick={copyLink}
                                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[var(--text-dark)] rounded-full font-semibold text-sm hover:shadow-lg transition-all border border-gray-200"
                             >
-                                <span className="material-icons text-base">link</span>
-                                <span>Kopiuj link</span>
+                                <span className="material-icons text-base">
+                                    {copied ? "check" : "link"}
+                                </span>
+                                <span>
+                                    {copied ? "Skopiowano!" : "Kopiuj link"}
+                                </span>
                             </button>
                         </div>
                     </div>

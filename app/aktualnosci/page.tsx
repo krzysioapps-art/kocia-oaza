@@ -28,6 +28,8 @@ export default function UpdatesPage() {
 
     const [showMoreFilters, setShowMoreFilters] = useState(false);
 
+    const [copiedId, setCopiedId] = useState<string | null>(null);
+
     useEffect(() => {
         const fetchUpdates = async () => {
             setIsLoading(true);
@@ -148,6 +150,14 @@ export default function UpdatesPage() {
         return configs[type] || configs["news"]; // 🔥 fallback
     };
 
+    const copyLink = (id: string) => {
+    const url = `${window.location.origin}/aktualnosci/${id}`;
+    navigator.clipboard.writeText(url);
+
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+};
+
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         const now = new Date();
@@ -180,16 +190,6 @@ export default function UpdatesPage() {
 
     const extraFilters = typeFilters.slice(6);
     const isMoreActive = extraFilters.some(f => f.key === selectedType);
-
-    const shareOnFacebook = (url: string) => {
-        if (typeof window === "undefined") return;
-
-        window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-            "_blank",
-            "width=600,height=400"
-        );
-    };
 
     return (
         <div className="min-h-screen bg-[var(--background)]">
@@ -458,18 +458,21 @@ export default function UpdatesPage() {
                                                             <span className="material-icons text-lg">arrow_forward</span>
                                                         </Link>
                                                     )}
-
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            const shareUrl = `${window.location.origin}/aktualnosci/${update.id}`;
-                                                            shareOnFacebook(shareUrl);
-                                                        }}
-                                                        className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-full font-semibold text-sm hover:bg-blue-100 transition-all"
-                                                    >
-                                                        <span className="material-icons text-base">share</span>
-                                                        <span>Udostępnij</span>
-                                                    </button>
+<button
+    onClick={(e) => {
+        e.stopPropagation();
+        copyLink(update.id);
+    }}
+    className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-full font-semibold text-sm hover:bg-gray-200 transition-all"
+>
+    <span className="material-icons text-base">
+        {copiedId === update.id ? "check" : "link"}
+    </span>
+    <span>
+        {copiedId === update.id ? "Skopiowano!" : "Kopiuj link"}
+    </span>
+</button>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
